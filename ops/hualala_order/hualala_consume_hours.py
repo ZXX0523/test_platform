@@ -21,7 +21,6 @@ def hualalaConsumeHours():
     print("打印环境choose_env：",choose_env)
 
     #输入校验
-    # elif refundPrice == "": res = {"msg": "请输入订单金额", "code": 200, "data": None}
     if userid == "" :
         res = {"msg": "请输入学员id", "code": 200, "data": None}
     elif choose_env == "undefined" :
