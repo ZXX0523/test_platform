@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="上传">
+    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="增加赠送课时是否为空的判断">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +14,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -35,7 +41,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Shell Script.quick_start.sh.executor": "Run",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/zhengxixi/PycharmProjects",
     "project.structure.last.edited": "Modules",
@@ -272,7 +278,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744109898642</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="上传">
+      <option name="closed" value="true" />
+      <created>1744110395751</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1744110395751</updated>
+    </task>
+    <task id="LOCAL-00015" summary="增加赠送课时是否为空的判断">
+      <option name="closed" value="true" />
+      <created>1744110720193</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1744110720193</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -283,8 +305,8 @@
     <MESSAGE value="新增功能-学员购买续费套餐" />
     <MESSAGE value="购课列表新增字段：付费课时，续费课时" />
     <MESSAGE value="处理bug，提交订单取错字段" />
-    <MESSAGE value="增加赠送课时是否为空的判断" />
     <MESSAGE value="上传" />
-    <option name="LAST_COMMIT_MESSAGE" value="上传" />
+    <MESSAGE value="增加赠送课时是否为空的判断" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加赠送课时是否为空的判断" />
   </component>
 </project>
