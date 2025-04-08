@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>画啦啦学员进线</title>
+    <script type="application/javascript" src="/static/js/hualalaComing.js"></script>
+        <link type="text/css" rel="stylesheet" href="/static/css/import_order.css">
+</head>
+<body style=";overflow: hidden;">
+<div class="modal-overlay"></div>
+<h1 style="color: #08A993;margin-left: 20px;">画啦啦学员进线</h1>
+<br>
+
+<div data-v-492e78dd="" class="el-wrapper-box packageManagement select-box mb-15 select-item">
+    <label class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>选择学员的环境：</label>
+    <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_env">
+        <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0"
+               class="el-radio-button el-radio-button--small is-active">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="test" checked>
+            <span class="el-radio-button__inner">UAT环境<!----></span></label>
+        <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="pre">
+            <span class="el-radio-button__inner">预发布环境<!----></span></label>
+    </div>
+</div>
+<br>
+<div  style="height: 60px;" data-v-492e78dd="" class="el-wrapper-box packageManagement select-box mb-15 select-item">
+    <label class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>选择进线的形式：</label>
+    <la data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_coming_type">
+        <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0"
+               class="el-radio-button el-radio-button--small is-active">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_coming_type"
+                   value="general" checked>
+            <span class="el-radio-button__inner">普通进线<!----></span></label>
+        <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_coming_type"
+                   value="introduce">
+            <span class="el-radio-button__inner">转介绍进线<!----></span></label>
+    </la>
+        <label style="margin-top: 3px; top: 4px; " data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small1">
+            <div id="inviter_phone" style="display: none" data-v-08df61ed="" class="el-input--medium1 el-input--suffix"><!---->
+                <span style="width:150px;font-size: 12px;color: grey;" class="">*邀请人画啦啦id:</span>
+                <input id="inviter_mobile" style="width:130px" type="number" name="mobile"  autocomplete="off" maxlength="11" placeholder="上级邀请人的画啦啦id" oninput="limitInputLength(this)" class="el-input__inner" value="22547484">
+            </div><!---->
+        </label>
+</div>
+<div  style="height: 60px;" data-v-492e78dd="" class="el-wrapper-box packageManagement select-box mb-15 select-item">
+    <label class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>选择进线的方式：</label>
+    <la data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_type">
+        <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0"
+               class="el-radio-button el-radio-button--small is-active">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="coming_type"
+                   value="random" checked>
+            <span class="el-radio-button__inner">随机号码进线<!----></span></label>
+        <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="coming_type"
+                   value="appoint">
+            <span class="el-radio-button__inner">指定手机号进线<!----></span></label>
+    </la>
+        <label style="margin-top: 3px; top: 4px; " data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small1">
+            <div id="telphone" style="display: none" data-v-08df61ed="" class="el-input--medium1 el-input--suffix"><!---->
+                <input id="areaCode" style="width:80px"  type="number" name="mobile"  autocomplete="off" maxlength="11" placeholder="区号" oninput="validateInput(event)" value="86" class="el-input__inner">
+                <input id="mobile" type="number" name="mobile"  autocomplete="off" maxlength="11" placeholder="学员手机号" oninput="limitInputLength(this)" class="el-input__inner">
+            </div><!---->
+            <div id="coming_num" style="display: block,flex" data-v-08df61ed="" class="el-input--medium1 el-input--suffix"><!---->
+                <span style="margin-left: 10px;width:100px;font-size: 12px;color: grey;" class="">*进线学员数量:</span>
+                <input id="coming_number" style="width:100px" type="number" name="coming_number"  autocomplete="off" maxlength="11" placeholder="进线学员数量" oninput="validateInput(event)" class="el-input__inner" value="1">
+            </div><!---->
+        </label>
+</div>
+<button id="submitorder" name="submitorder" type="submit" value="进线" onClick="coming()" type="button" style="margin-left: 20px;" class="el-button el-button--success el-button--small"><!----><!----><span>学员进线</span></button>
+<p style="margin-left: 20px;" >请求结果：</p>
+<div id="result" style="margin-left: 40px;width: 1000px;height:200px;"></div>
+</body>
+</html>

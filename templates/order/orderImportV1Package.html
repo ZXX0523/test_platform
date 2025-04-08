@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>icode_test_platform</title>
+    <script type="text/javascript" src="/static/js/importV1.js"></script>
+</head>
+<body style="background-color: #F5F5F5" onload="checkSku()">
+
+<h1 style="color: #08A993">豌豆益智套餐订单造数平台</h1>
+
+<table border="1" cellspacing="0">
+    <thead>
+    <tr>
+        <th><span>模板姓名</span></th>
+        <th><span>模板区号</span></th>
+        <th><span>模板手机号</span></th><!--<th><span>后缀起始编号</span></th>--></tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><label for="tname"></label><input id="tname" type="text" placeholder="模板姓名" value="小明"/></td>
+        <td><label for="tarea_code"></label><input id="tarea_code" type="number" placeholder="模板区号" value="86"/></td>
+        <td><label for="tphone"></label><input id="tphone" type="tel" placeholder="模板手机号" value="14600000001"/></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<input type="button" onClick="addRow();count('+');" style="font-size:16px;" value="加一行"/>
+<input type="button" onClick="remoteRow(-1);;count('-');" style="font-size:16px;" value="删一行"/>
+<table id="oTable" border="1" width="500" cellspacing="0">
+    <thead>
+    <tr style="background-color:#eeeeee;" bordercolor="#aaaaaa">
+        <th>姓名</th>
+        <th>区号</th>
+        <th>手机号</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<br>
+<div id="choose_box"><label for="choose_url1">选择导入环境：</label>
+    <input id="choose_url1" type="radio" name="choose_url" value="test" onClick="conhidden('test');checkSku()" checked/>测试
+    <input id="choose_url3" type="radio" name="choose_url" value="pro" onClick="conhidden('pro');checkSku()"/>生产
+    <input id="choose_url4" type="radio" name="choose_url" value="pre" onClick="conhidden('pre');checkSku()"/>预发
+</div>
+<div id="choose_type_box"><label for="choose_type1">选择课程类型：</label>
+    <input id="choose_type1" type="radio" name="choose_type" value="1" onClick="checkSku()"/>DEMO套餐
+    <input id="choose_type2" type="radio" name="choose_type" value="2" onClick="checkSku()"/>正课套餐
+    <input id="choose_type3" type="radio" name="choose_type" value="3" onClick="checkSku()"/>赠送套餐
+    <input id="choose_type4" type="radio" name="choose_type" value="4" onClick="checkSku()"/>录播课套餐
+    <input id="choose_type5" type="radio" name="choose_type" value="5" onClick="checkSku()"/>其他套餐
+
+
+</div>
+<div >
+<div id="channel_id_div"><label for="channel_id">输入渠道ID：</label><input id="channel_id" type="number" name="channel_id"
+                                                                       value="205552"/></div>
+<div id="sku_id_div"><label for="sku_id">输入V1套餐SKUID：</label><input id="sku_id" type="number" name="sku_id"
+                                                                    value="31791779"/></div>
+<div id="sku_price_div"><label for="sku_price">输入V1套餐优惠价：</label><input id="sku_price" type="number" name="sku_price"
+                                                                        value="0.01"/></div>
+    </div>
+<br>
+<button id="selectSku" name="selectSku" type="submit" value="查询套餐" onClick="checkSku()" >刷新查询</button>
+<table id="skuTable" border="1" width="700" cellspacing="0">
+    <thead>
+    <tr>
+        <th><span>单选</span></th>
+        <th><span>环境</span>
+        <th><span>套餐id</span></th>
+        </th>
+        <th><span>套餐名称</span></th>
+        <th><span>套餐类型</span></th>
+        <th><span>套餐优惠价</span></th>
+        <th><span>操作</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<button id="submitUserInfo" name="submitUserInfo" type="submit" value="报名提交" onClick="submit()" style="background-color: gold;font-size: 20px;">报名提交</button>
+<span style="font-size: 15px;background-color: antiquewhite">生产环境：1、已注册手机号必须是测试账号；未注册则需要在白名单里面；2、必须是测试套餐</span>
+<br>
+
+<br>
+<table id="addSku" style="width: min-content;" border="1" cellspacing="0">
+    <thead>
+    <tr>
+        <th><span>环境</span></th>
+        <th><span>套餐id</span></th>
+        <th><span>套餐名称</span></th>
+        <th><span>套餐类型</span></th>
+        <th><span>套餐价格</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><label for="add_sku_env"></label><input id="add_sku_env" type="number" placeholder="1-测试/2-生产/3-预发"
+                                                    value=""/></td>
+        <td><label for="add_sku_id"></label><input id="add_sku_id" type="number" placeholder="套餐id" value=""/></td>
+        <td><label for="add_sku_name"></label><input id="add_sku_name" type="text" placeholder="套餐名称" value=""/></td>
+        <td><label for="add_course_type"></label><input id="add_course_type" type="number"
+                                                        placeholder="1-DEMO/2-正课/3-赠送/4-录播课" value=""/></td>
+        <td><label for="add_sku_price"></label><input id="add_sku_price" type="number" placeholder="套餐价格(元)" value=""/>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+<button id="submitSku" name="submitSku" type="submit" value="添加套餐" onClick="addSku()">添加套餐</button>
+<br>
+<p>请求结果：</p>
+<div id="result" style="width: 500px;height:200px;"></div>
+</body>
+</html>

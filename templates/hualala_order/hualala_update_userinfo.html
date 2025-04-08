@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单退款123123</title>
+    <script type="application/javascript" src="/static/js/hualalaUpdateUserInfo.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/import_order.css">
+</head>
+<body style="overflow: hidden;">
+<h1 style="color: #08A993;margin-left: 20px;">画啦啦修改学员基础信息</h1>
+<br>
+    <form id="submitorder" onsubmit="event.preventDefault(); UpdateUserInfo();">
+<!--<form id="submitorder" name="submitorder" onsubmit="return UpdateUserInfo()">-->
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+    <label style="margin-left: 7px;" class="el-form-item__label"><span data-v-492e78dd="" class="red"> *</span>输入学员手机号：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="mobile" type="number" name="mobile" autocomplete="off" placeholder="学员手机号"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+</div>
+<div style="margin-left: 20px;" data-v-492e78dd=""
+     class="el-wrapper-box packageManagement select-box mb-15 select-item">
+    <label class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>选择学员的环境：</label>
+    <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_env">
+        <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0"
+               class="el-radio-button el-radio-button--small is-active">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="test" checked>
+            <span class="el-radio-button__inner">UAT环境<!----></span></label>
+        <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="pre">
+            <span class="el-radio-button__inner">预发布环境<!----></span></label>
+    </div>
+</div>
+<br>
+<button style="margin-left: 40px;"  type="submit" value="更新" class="el-button el-button--success el-button--small"><!---->
+
+<!--<button style="margin-left: 40px;"  type="submit" value="更新" class="el-button el-button&#45;&#45;success el-button&#45;&#45;small"-->
+<!-- id="submitorder" name="submitorder" onclick="UpdateUserInfo()">&lt;!&ndash;&ndash;&gt;-->
+    <!----><span>确认更新</span>
+</button>
+        <span style="margin-left: 10px;font-size: 12px;color: grey;">*适用于学员首报审核时，跳过学员档案必填资料填写</span>
+<p style="margin-left: 40px;" >请求结果：</p>
+<div id="result" style="margin-left: 40px;width: 500px;height:200px;"></div>
+</form>
+</body>
+</html>

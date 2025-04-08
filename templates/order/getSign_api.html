@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网关接口</title>
+
+</head>
+<body>
+<h1 style="color: #08A993">豌豆网关接口</h1>
+<br>
+<!--<div class="row col-lg-9">-->
+<div id="choose_env"><label for="choose_url1">选择接口执行环境：</label>
+    <input id="choose_url1" type="radio" name="choose_url" value="test" checked/>UAT环境
+</div>
+<br>
+<div class="form-row row col-lg-12">
+    <form class="bs-example bs-example-form" role="form">
+        <div class="form-group row col-lg-11">
+            <input type="text" class="form-control" id="url_api" style="width:500px" placeholder="请输入url">
+            <span><input type="reset" value="重置"/></span>
+        </div>
+        <br>
+        <div class = "form-group row col-lg-11">
+            <textarea class="form-control" rows="8" id="data" style="width:500px" placeholder="请输入body"></textarea>
+        </div>
+    </form>
+</div>
+<br>
+<button id="submit" name="submit" type="submit" value="提交" onClick="api()">提交</button>
+<br>
+<p>请求结果：</p>
+<div id="result" style="width: 500px;height:200px;"></div>
+
+<script type="application/javascript" src="/static/js/getSign_api.js"></script>
+</body>
+</html>

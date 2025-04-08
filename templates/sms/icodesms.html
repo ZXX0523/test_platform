@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取验证码</title>
+    <script type="application/javascript" src="/static/js/icodesms.js"></script>
+</head>
+<body>
+<h1 style="color: #08A993">豌豆查询验证码</h1>
+<br>
+<div id="choose_env"><label for="choose_url1">选择获取验证码环境：</label>
+    <input id="choose_url1" type="radio" name="choose_url" value="test" checked/>UAT环境
+    <!-- <input id="choose_url2" type="radio" name="choose_url" value="pro"/>生产环境 -->
+</div>
+<br>
+<input type="search" id="phone" type="number" name="phone" value="" placeholder="请输入手机号" style="height:25px;"/>
+<button id="selectSms" name="selectSms" type="submit" value="查询验证码" onClick="getSms()">查询验证码</button>
+<br>
+<p>请求结果：</p>
+<div id="result" style="width: 500px;height:200px;"></div>
+</body>
+</html>

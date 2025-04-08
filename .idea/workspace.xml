@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="增加赠送课时是否为空的判断" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2jgGJAQVmv6sbHRv1qoBsvrRNDS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
+    "Notification.DoNotAsk-Vcs Important Messages": "true",
+    "Python.app.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Shell Script.quick_start.sh.executor": "Run",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/工作/xixi/icode_test_platform-master",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "vcs.Git"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\lib\py" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\ops\hualala_order" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\static\js" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\templates\hualala_order" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\static\css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\ops\wandou" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\templates\wandou" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\templates" />
+      <recent name="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\templates\hualala_order" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.app-new">
+    <configuration name="app-new" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="icode_test_platform-master" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="icode_test_platform" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11" />
+      <option name="WORKING_DIRECTORY" value="C:\工作\xixi\icode_test_platform-master" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="wandou_coming_user" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="icode_test_platform" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lib/py" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\zhengxixi\Downloads\icode_test_platform-master\icode_test_platform-master\lib\py\wandou_coming_user.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="quick_start.sh" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/quick_start.sh" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.app-new" />
+      <item itemvalue="Python.app" />
+      <item itemvalue="Python.wandou_coming_user" />
+      <item itemvalue="Shell Script.quick_start.sh" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.app-new" />
+        <item itemvalue="Python.app" />
+        <item itemvalue="Python.wandou_coming_user" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="" />
+      <created>1721801232043</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721801232043</updated>
+    </task>
+    <task id="LOCAL-00001" summary="测试提交">
+      <option name="closed" value="true" />
+      <created>1735908820280</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1735908820280</updated>
+    </task>
+    <task id="LOCAL-00002" summary="增加学员首报订单，增加审批失败的校验，若审批失败返回失败原因">
+      <option name="closed" value="true" />
+      <created>1736246046395</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1736246046395</updated>
+    </task>
+    <task id="LOCAL-00003" summary="消课等待时间较长，因此增加了跑job系统消课的代码，但后续job只能消近一个月的课程。不适用当前的消课场景，因此相关代码暂时先注释了">
+      <option name="closed" value="true" />
+      <created>1736762856394</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1736762856394</updated>
+    </task>
+    <task id="LOCAL-00004" summary="修改配置文件">
+      <option name="closed" value="true" />
+      <created>1736920349838</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1736920349838</updated>
+    </task>
+    <task id="LOCAL-00005" summary="新增功能-学员购买续费套餐">
+      <option name="closed" value="true" />
+      <created>1738834954396</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1738834954396</updated>
+    </task>
+    <task id="LOCAL-00006" summary="购课列表新增字段：付费课时，续费课时">
+      <option name="closed" value="true" />
+      <created>1739778937239</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1739778937239</updated>
+    </task>
+    <task id="LOCAL-00007" summary="处理bug，提交订单取错字段">
+      <option name="closed" value="true" />
+      <created>1739779438620</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739779438620</updated>
+    </task>
+    <task id="LOCAL-00008" summary="增加赠送课时是否为空的判断">
+      <option name="closed" value="true" />
+      <created>1739850769427</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1739850769427</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="测试提交" />
+    <MESSAGE value="增加学员首报订单，增加审批失败的校验，若审批失败返回失败原因" />
+    <MESSAGE value="消课等待时间较长，因此增加了跑job系统消课的代码，但后续job只能消近一个月的课程。不适用当前的消课场景，因此相关代码暂时先注释了" />
+    <MESSAGE value="修改配置文件" />
+    <MESSAGE value="新增功能-学员购买续费套餐" />
+    <MESSAGE value="购课列表新增字段：付费课时，续费课时" />
+    <MESSAGE value="处理bug，提交订单取错字段" />
+    <MESSAGE value="增加赠送课时是否为空的判断" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加赠送课时是否为空的判断" />
+  </component>
+</project>

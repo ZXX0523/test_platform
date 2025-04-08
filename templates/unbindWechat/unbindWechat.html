@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豌豆微信解绑</title>
+</head>
+<body>
+<h1 style="color: #08A993">豌豆微信解绑</h1>
+<div id="choose_env"><label for="choose_url1">选择微信解绑环境：</label>
+    <input id="choose_url1" type="radio" name="choose_url" value="pro" checked/>生产环境
+</div>
+<br>
+<input id="openid" type="text" name="openid" placeholder="请输入openid" style="width:300px;height:19px;"/>
+</input><button id="unbind" name="unbind" type="submit" value="微信解绑" onClick="unbind()">微信解绑</button>
+<br>
+<p>请求结果：</p>
+<div id="result" style="width: 500px;height:200px;"></div>
+<script type="application/javascript" src="/static/js/unbindWechat.js"></script>
+</body>
+</html>

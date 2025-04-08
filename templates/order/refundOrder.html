@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单退款</title>
+    <script type="application/javascript" src="/static/js/refundOrder.js"></script>
+</head>
+<body>
+<h1 style="color: #08A993">豌豆益智订单退款</h1>
+<br>
+<div id="choose_env"><label for="choose_url1">选择订单退款环境：</label>
+    <input id="choose_url1" type="radio" name="choose_url" value="test" checked/>UAT环境
+<!--    <input id="choose_url2" type="radio" name="choose_url" value="dev"/>开发环境-->
+<!--    <input id="choose_url2" type="radio" name="choose_url" value="pro"/>生产环境-->
+</div>
+<br>
+<div id="orderNum_div"><label for="orderNum">输入退款订单号：</label><input type="search" id="orderNum" type="number" name="orderNum" style="width:200px" value=""/></div>
+<br>
+<div id="refundPrice_div"><label for="refundPrice">输入订单金额：</label><input type="search" id="refundPrice" type="number"  style="width:100px" name="refundPrice" value=""/></div>
+<br>
+<button id="submitorder" name="submitorder" type="submit" value="订单退款" onClick="UpdateUserInfo()">订单退款</button>
+<br>
+<p>请求结果：</p>
+<div id="result" style="width: 500px;height:200px;"></div>
+</body>
+</html>

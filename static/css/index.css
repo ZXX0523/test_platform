@@ -1,0 +1,47 @@
+html,body{
+                width:100%;
+                height:100%;
+                margin:0px;
+                }
+            /* 头部样式 */
+            .header {
+                background-color: #50C8B9;
+                padding: 5px;
+                text-align: left;
+                color: white;
+
+                }
+            /*左侧菜单样式*/
+            .userMenu {
+                float: left;
+                width: 10%;
+                text-align: center;
+                color: #000000;
+            }
+
+            content {
+                float: right;
+                min-height: 0; /* 默认值 */
+                max-height: none; /* 默认值 */
+                height: auto; /* 默认值 */
+            }
+
+            a {text-decoration:none;} /*删除链接下划线*/
+            ul {
+                 list-style-type: none;
+                 argin: 0;
+                 padding: 0;
+                 width: 200px;
+                 height: 100%; /* 全屏高度 */
+                 overflow: auto; /* 如果导航栏选项多，允许滚动 */
+                }
+            /*点击菜单后颜色变更*/
+            a:focus {color: #50C8B9;}
+            .select-box .select-item {
+                border-bottom: 1px solid #dcdfe6;
+                padding: 10px 15px;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-align: center;
+                align-items: center
+            }

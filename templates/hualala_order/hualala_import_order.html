@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单退款123123</title>
+    <script type="application/javascript" src="/static/js/hualalaImportOrder.js"></script>
+        <link type="text/css" rel="stylesheet" href="/static/css/import_order.css">
+</head>
+<body style="overflow: hidden;">
+<div class="modal-overlay"></div>
+<h1 style="color: #08A993;margin-left: 20px;">画啦啦学员购课</h1>
+<br>
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="column">-->
+<!--                <div class="item">系统课：2课时</div>-->
+<!--                <div class="item">强化课：2课时</div>-->
+<!--            </div>-->
+<!--            <div class="column">-->
+<!--                <div class="item">专题课：1课时</div>-->
+<!--                <div class="item">强化课：1课时</div>-->
+<!--                <div class="item">大直播课：1课时</div>-->
+<!--                <div class="item">系统课：1课时</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+        <label style="margin-left: 12px;" class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>输入学员手机号：</label>
+            <div class="el-form-item__content" style="width:300px">
+            <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix" style="display:flex;"><!---->
+                <input id="mobile" type="number" name="mobile"  autocomplete="off" placeholder="学员手机号" class="el-input__inner"><!----><!----><!----><!---->
+            </div><!---->
+        </div>
+    </div>
+    <div data-v-492e78dd="" data-v-58c9b7b8="" class="el-wrapper-box packageManagement">
+        <div data-v-492e78dd="" class="select-box mb-15"><!---->
+            <div data-v-492e78dd="" class="select-item">
+                <span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red">*</span>选择学员的环境：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_env">
+                    <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0" class="el-radio-button el-radio-button--small is-active">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url" value="test" checked>
+                        <span class="el-radio-button__inner">UAT环境<!----></span></label>
+                    <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url" value="pre">
+                        <span class="el-radio-button__inner">预发布环境<!----></span></label>
+                </div>
+            </div>
+            <div data-v-492e78dd="" class="select-item">
+                <span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red" >*</span>套餐类型：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor"  id="choose_package_type">
+                    <label data-v-492e78dd="" role="radio" tabindex="0" class="el-radio-button el-radio-button--small is-active">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="package_type" value="apply" checked>
+                        <span class="el-radio-button__inner">首报全款<!----></span></label>
+                    <label data-v-492e78dd="" role="radio" tabindex="0" class="el-radio-button el-radio-button--small is-active">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="package_type" value="renew">
+                        <span class="el-radio-button__inner">续费全款<!----></span></label>
+                </div>
+            </div>
+            <div data-v-492e78dd="" class="select-item">
+                <span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red">*</span>套餐地区：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor">
+                    <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0" class="el-radio-button el-radio-button--small is-active">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="01" checked>
+                        <span class="el-radio-button__inner" >中国大陆<!----></span></label>
+                </div>
+            </div>
+            <div data-v-492e78dd="" class="select-item">
+                <span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red">*</span>活动对象：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor">
+                    <label data-v-492e78dd="" role="radio" tabindex="0" class="el-radio-button el-radio-button--small is-active" aria-checked="true">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="全量" checked>
+                        <span class="el-radio-button__inner">全量<!----></span></label>
+                </div>
+            </div>
+            <div data-v-492e78dd="" class="select-item">
+                <span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red">*</span>套餐期长：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_sku">
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course1" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="1955,1963,1826" name="choose_sku" checked>
+                    <span class="el-radio-button__inner">1课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course7" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="2395,2394" name="choose_sku">
+                    <span class="el-radio-button__inner">4课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course2" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="313,1989" name="choose_sku">
+                    <span class="el-radio-button__inner">12课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course3" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="201,206,207,2118" name="choose_sku">
+                    <span class="el-radio-button__inner">24课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course4" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="202,209" name="choose_sku">
+                    <span class="el-radio-button__inner">48课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course5" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="301,302,303,304" name="choose_sku">
+                    <span class="el-radio-button__inner">72课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course6" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="309,310,311,312" name="choose_sku">
+                    <span class="el-radio-button__inner">144课时<!----></span></label>
+                <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                    <input id="course999" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="appoint" name="choose_sku">
+                    <span class="el-radio-button__inner">指定套餐id<!----></span></label>
+
+                <label style="margin-top: 3px; top: 4px; " data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small1">
+                    <div id="appoint_skuid" style="display: none" data-v-08df61ed="" class="el-input--medium1 el-input--suffix"><!---->
+                        <input id="searchInput" style="width:100px" type="number" name="searchInput"  autocomplete="off" maxlength="11" placeholder="套餐id" oninput="validateInput(event)" value="1955" class="el-input__inner">
+                    </div><!---->
+                </label>
+<!--                <label data-v-492e78dd="" tabindex="-1" class="el-radio-button el-radio-button&#45;&#45;small" onClick="search_sku()">-->
+<!--                    <input id="submit_skuid" type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio">-->
+<!--                    <span class="el-radio-button__inner">确认查询&lt;!&ndash;&ndash;&gt;</span></label>-->
+                </div> <!----> <!---->
+            </div>
+            <div data-v-492e78dd="" class="select-item"><span data-v-492e78dd="" class="title"><span data-v-492e78dd="" class="red">*</span>套餐含画具：</span>
+                <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="PaintingTools">
+                    <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="1" name="PaintingTools">
+                        <span class="el-radio-button__inner">含画具<!----></span></label>
+                    <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+                        <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" value="0" name="PaintingTools">
+                        <span class="el-radio-button__inner">不含画具<!----></span></label>
+                </div>
+            </div>
+        </div>
+<!--        <div data-v-492e78dd="" class="mtb-15 el-row is-justify-end el-row&#45;&#45;flex">-->
+<!--            <button data-v-492e78dd="" type="button" class="el-button refresh-btn el-button&#45;&#45;primary el-button&#45;&#45;medium">&lt;!&ndash;&ndash;&gt;&lt;!&ndash;&ndash;&gt;<span>刷新</span></button>-->
+<!--        </div>-->
+        <div data-v-492e78dd="" class="i61-table">
+            <div class="el-table--scrollable-x">
+        <div class="el-table el-table--fit el-table--border el-table--scrollable-x el-table--medium">
+            <div class="el-table__header-wrapper">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 1100px;">
+                    <colgroup>
+                        <col name="el-table_1_column_1" width="80"><col name="el-table_1_column_2" width="180"><col name="el-table_1_column_3" width="80">
+                        <col name="el-table_1_column_4" width="80"><col name="el-table_1_column_5" width="80">
+                        <col name="el-table_1_column_4" width="120"><col name="el-table_1_column_5" width="120"><col name="el-table_1_columsn_14" width="80">
+                        <col name="el-table_1_column_15" width="80"><col name="el-table_1_column_16" width="80">
+                        <col name="el-table_1_column_18" width="80"><col name="el-table_1_column_19" width="80"><col name="el-table_1_column_20" width="130">
+                        <col name="el-table_1_column_21" width="140"><col name="gutter" width="0">
+                    </colgroup>
+                    <thead class="has-gutter">
+                    <tr class="">
+                        <th colspan="1" rowspan="1" class="el-table_1_column_5  is-center   is-leaf"><div class="cell">套餐ID</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_1  is-center   is-leaf"><div class="cell">套餐名称</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_2  is-center   is-leaf"><div class="cell">套餐地区</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_3  is-center   is-leaf"><div class="cell">套餐类型</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_4  is-center   is-leaf"><div class="cell">活动对象</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_2  is-center   is-leaf"><div class="cell">付费课时</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_3  is-center   is-leaf"><div class="cell">赠送课时</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_14  is-center   is-leaf"><div class="cell">是否含优惠券</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_15  is-center   is-leaf"><div class="cell">含画具</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_16  is-center   is-leaf"><div class="cell">原价</div></th>
+<!--                        <th colspan="1" rowspan="1" class="el-table_1_column_17  is-center   is-leaf"><div class="cell">套餐金额</div></th>-->
+                        <th colspan="1" rowspan="1" class="el-table_1_column_18  is-center   is-leaf"><div class="cell">实付金额</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_19  is-center   is-leaf"><div class="cell">活动配置ID</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_20  is-center   is-leaf"><div class="cell">活动名称</div></th>
+                        <th colspan="1" rowspan="1" class="el-table_1_column_21  is-center   is-hidden is-leaf"><div class="cell">操作</div></th>
+                        <th class="gutter" style="width: 0px; display: none;"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="el-table__body-wrapper is-scrolling-left">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width: 1100px;">
+                    <colgroup>
+                        <col name="el-table_1_column_1" width="80"><col name="el-table_1_column_2" width="180"><col name="el-table_1_column_3" width="80">
+                        <col name="el-table_1_column_4" width="80"><col name="el-table_1_column_5" width="80">
+                        <col name="el-table_1_column_15" width="120"><col name="el-table_1_column_16" width="120"><col name="el-table_1_column_17" width="80">
+                        <col name="el-table_1_column_15" width="80"><col name="el-table_1_column_16" width="80">
+                        <col name="el-table_1_column_18" width="80"><col name="el-table_1_column_19" width="80"><col name="el-table_1_column_20"  width="130">
+                        <col name="el-table_1_column_21" width="140">
+                    </colgroup>
+                    <tbody id="applystandardcourse">
+                    <tr><td><div class="el-table__empty-block" style="height: 100%; width: 1100px;"><span class="el-table__empty-text">暂无数据</span></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="loading" class="el-loading-mask" style="display: none;">
+                <div class="el-loading-spinner">
+                    <svg viewBox="25 25 50 50" class="circular">
+                        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                    </svg><!---->
+                </div>
+            </div>
+        </div>
+        </div> <!---->
+    </div></div>
+
+<p style="margin-left: 20px;">请求结果：</p>
+<div id="result" style="margin-left: 20px;width: 500px;height:200px;"></div>
+</body>
+</html>
