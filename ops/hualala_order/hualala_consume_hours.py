@@ -15,7 +15,6 @@ def hualalaConsumeHoursHtml(filename=None):
 @hualala_consume_hours.route('/py/hualalaConsumeHoursAll')
 def hualalaConsumeHours():
     choose_env = flask.request.values.get('choose_env')
-    # refundPrice = flask.request.values.get('refundPrice')
     userid = flask.request.values.get('user_id')
     course_type = flask.request.values.get('course_type')
     print("打印环境choose_env：",choose_env)

@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="增加赠送课时是否为空的判断">
+    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="测试提交-">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -310,11 +310,34 @@
       <option name="project" value="LOCAL" />
       <updated>1744111154580</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="test-提交">
+      <option name="closed" value="true" />
+      <created>1744111523166</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1744111523166</updated>
+    </task>
+    <task id="LOCAL-00019" summary="测试提交">
+      <option name="closed" value="true" />
+      <created>1744111566312</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1744111566312</updated>
+    </task>
+    <task id="LOCAL-00020" summary="测试提交-">
+      <option name="closed" value="true" />
+      <created>1744111624012</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1744111624012</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="测试提交" />
     <MESSAGE value="增加学员首报订单，增加审批失败的校验，若审批失败返回失败原因" />
     <MESSAGE value="消课等待时间较长，因此增加了跑job系统消课的代码，但后续job只能消近一个月的课程。不适用当前的消课场景，因此相关代码暂时先注释了" />
     <MESSAGE value="修改配置文件" />
@@ -323,6 +346,9 @@
     <MESSAGE value="处理bug，提交订单取错字段" />
     <MESSAGE value="上传" />
     <MESSAGE value="增加赠送课时是否为空的判断" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加赠送课时是否为空的判断" />
+    <MESSAGE value="test-提交" />
+    <MESSAGE value="测试提交" />
+    <MESSAGE value="测试提交-" />
+    <option name="LAST_COMMIT_MESSAGE" value="测试提交-" />
   </component>
 </project>
