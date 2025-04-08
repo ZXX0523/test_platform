@@ -5,7 +5,6 @@ from flask import render_template
 import html
 
 from lib.py.hualala_coming_user import UserComingRun
-from lib.py.icode_script import icodeScript
 from lib.py.order_sku_V2_script import *
 
 hualala_coming = Blueprint('hualala_coming', __name__)
