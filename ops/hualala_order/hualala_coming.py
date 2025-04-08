@@ -43,7 +43,6 @@ def UserComing():
                 res = {"msg": "进线成功", "data": result[0]}
             else:
                 res = {"msg": "进线失败", "data": result}
-            # print("执行结果：",result)
             # res = {"msg": "订单退款成功", "code": 200, "data": {"订单号：": orderNum, "订单金额：": refundPrice}}
         except KeyError as e:
             # 异常时，执行该块
