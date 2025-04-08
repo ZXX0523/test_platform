@@ -2,7 +2,6 @@ from os import error
 import flask
 from flask import Blueprint
 from flask import render_template
-import html
 
 from lib.py.hualala_coming_user import UserComingRun
 from lib.py.order_sku_V2_script import *
