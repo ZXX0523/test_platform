@@ -21,7 +21,6 @@ def UserComing():
     areaCode = flask.request.values.get('areaCode')
     TransferId = flask.request.values.get('transfer_id')
 
-    Authorization = ''
     print("打印环境choose_env：",choose_env,choose_type,mobile)
 
     #输入校验

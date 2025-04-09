@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="测试提交-">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +14,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="master" />
@@ -334,7 +340,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744111624012</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="测试提交-">
+      <option name="closed" value="true" />
+      <created>1744111834996</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1744111834996</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -343,12 +357,12 @@
     <MESSAGE value="修改配置文件" />
     <MESSAGE value="新增功能-学员购买续费套餐" />
     <MESSAGE value="购课列表新增字段：付费课时，续费课时" />
-    <MESSAGE value="处理bug，提交订单取错字段" />
     <MESSAGE value="上传" />
     <MESSAGE value="增加赠送课时是否为空的判断" />
     <MESSAGE value="test-提交" />
     <MESSAGE value="测试提交" />
     <MESSAGE value="测试提交-" />
-    <option name="LAST_COMMIT_MESSAGE" value="测试提交-" />
+    <MESSAGE value="处理bug，提交订单取错字段" />
+    <option name="LAST_COMMIT_MESSAGE" value="处理bug，提交订单取错字段" />
   </component>
 </project>
