@@ -25,8 +25,8 @@ def UserComing():
 
     #输入校验
     if choose_env == "undefined":res = {"code": 200, "msg": "请选择进线环境", "data": None}
-    if choose_type == "undefined":res = {"code": 200, "msg": "请选择进线类型", "data": None}
 
+    if choose_type == "undefined":res = {"code": 200, "msg": "请选择进线类型", "data": None}
     else:
         try:
             result = UserComingRun().UserComingRuning(choose_env,choose_type,mobile,coming_number,areaCode,TransferId)

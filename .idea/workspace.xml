@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="测试提交-">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
