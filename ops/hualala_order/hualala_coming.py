@@ -41,4 +41,5 @@ def UserComing():
             # 异常时，执行该块
             res = {"msg": "进线失败", "code": 201, "data": e}
         pass
+
     return json.dumps(res, ensure_ascii=False)
