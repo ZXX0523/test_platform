@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="测试提交-">
-      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_coming.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/conf/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/hualala_order/hualala_coming.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/hualala_order/hualala_coming.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/hualala_order/hualala_import_order.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/hualala_order/hualala_import_order.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -355,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744165188362</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="测试提交-">
+      <option name="closed" value="true" />
+      <created>1744166639209</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1744166639209</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
