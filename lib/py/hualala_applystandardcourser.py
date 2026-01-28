@@ -1,7 +1,6 @@
 # import datetime
 import numbers
 import random
-from datetime import date
 from datetime import datetime
 
 import xlwt
@@ -14,6 +13,7 @@ from openpyxl.reader.excel import load_workbook
 from openpyxl.styles.numbers import NumberFormat
 from openpyxl.workbook import Workbook
 
+from datetime import date
 from bin.runMySQL import mysqlMain
 from conf.readconfig import getConfig
 from lib.py.hualala_update_userinfo import UpdateUserInfoRun
@@ -21,14 +21,14 @@ from lib.py.order_V2_script import *
 import requests
 import xlsxwriter
 import json
-import pandas as pd
 import os, time
+from conf.readconfig import *
+import pandas as pd
 
 # import oss2
 # from qcloud_cos import CosConfig
 # from qcloud_cos import CosS3Client
 
-from conf.readconfig import *
 
 from datetime import datetime, timedelta
 
@@ -87,7 +87,7 @@ class ApplyStandardCourserRun():
 
     # 调用导入订单的接口
     def importCreateNew(self,mobile, file_path, Authorization, choose_url):
-        gw_url = getConfig("liuyi-url", choose_url)
+        gw_url = getConfig("liuyi-gw-mg-url", choose_url)
         url_path = "/manager-api/o/standard/applySignUp/importCreateNew"
         headers = {
             'authorization': Authorization,
@@ -146,7 +146,7 @@ class ApplyStandardCourserRun():
 
     # 调用接口，将首报订单审批通过
     def order_audit(self,Authorization,import_id,choose_url):
-        gw_url = getConfig("liuyi-url", choose_url)
+        gw_url = getConfig("liuyi-gw-mg-url", choose_url)
         url_path = "/manager-api/o/standard/applySignUp/batchAudit"
         headers = {
             'content-type': 'application/json',

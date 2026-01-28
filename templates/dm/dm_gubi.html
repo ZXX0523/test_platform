@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DM系统相关操作</title>
+    <script type="application/javascript" src="/static/js/dm_gubi.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/import_order.css">
+</head>
+<body style="overflow: hidden;">
+<h1 style="color: #08A993;margin-left: 20px;">DM系统相关操作</h1>
+<br>
+    <form id="submitorder" onsubmit="event.preventDefault(); UpdateUserInfo();">
+<div style="margin-left: 20px;" data-v-492e78dd=""
+     class="el-wrapper-box packageManagement select-box mb-15 select-item">
+    <label style="margin-left: 7px;" class="el-form-item__label"><span data-v-492e78dd="" class="red">*</span>选择学员的环境：</label>
+    <div data-v-492e78dd="" role="radiogroup" class="el-radio-group bor" id="choose_env">
+        <label data-v-492e78dd="" role="radio" aria-checked="true" tabindex="0"
+               class="el-radio-button el-radio-button--small is-active">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="test" checked>
+            <span class="el-radio-button__inner">UAT环境<!----></span></label>
+        <label data-v-492e78dd="" role="radio" tabindex="-1" class="el-radio-button el-radio-button--small">
+            <input type="radio" tabindex="-1" autocomplete="off" class="el-radio-button__orig-radio" name="choose_url"
+                   value="pre">
+            <span class="el-radio-button__inner">预发布环境<!----></span></label>
+    </div>
+</div>
+</br>
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline">
+    <div class="form-group">
+
+    <label class="el-form-item__label">更新学员开课日</label>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>咕比学员id：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="userid" type="number" name="mobile" autocomplete="off" placeholder="咕比学员id"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <label style="margin-left: 7px;"><span data-v-492e78dd="" class="red"> *</span>开课日期：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="opencourseday"  name="opencourseday" autocomplete="off" placeholder="开课日"
+       class="el-input__inner" required/>
+        </div><!---->
+    </div>
+    <button style="margin-left: 30px;"  type="submit" value="更新" class="el-button el-button--success el-button--small1"><!---->
+
+        <!----><span>确认更新</span>
+    </button>
+    </div>
+</div>
+<br>
+
+</form>
+
+
+
+
+<form id="update_course_finished_status" onsubmit="event.preventDefault(); FinishedStatus()">
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+    <div class="form-group">
+    <label class="el-form-item__label">第一节课完课状态</label>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>咕比学员id：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="gubi_id"  name="gubi_id" autocomplete="off" placeholder="咕比学员id"  type="number"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <label style="margin-left: 7px;"><span data-v-492e78dd="" class="red"> *</span>是否完课：</label>
+        <div class="select-container">
+        <select id="finished_status" class="custom-select">
+            <option value="1">是</option>
+            <option value="0">否</option>
+        </select>
+        </div>
+
+    <button style="margin-left: 30px;"  type="submit" value="更新" class="el-button el-button--success el-button--small1"><!---->
+    <!----><span>确认更新</span>
+    </button>
+    </div>
+</div>
+</form>
+
+<form id="update_go_pk_record" onsubmit="event.preventDefault(); PkRecord()">
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+    <div class="form-group">
+    <label class="el-form-item__label">更新对弈数据</label>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>咕比学员id：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="user_id_pk"  name="gubi_id" autocomplete="off" placeholder="咕比学员id" type="number"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>赢的局数：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="win_num"  name="win_num" autocomplete="off" placeholder="赢的局数" type="number"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>输的局数：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="lose_num"  name="lose_num" autocomplete="off" placeholder="输的局数" type="number"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <button style="margin-left: 30px;"  type="submit" value="更新" class="el-button el-button--success el-button--small1"><!---->
+    <!----><span>确认更新</span>
+    </button>
+    </div>
+</div>
+</form>
+
+<form id="delete_review_record" onsubmit="event.preventDefault(); DeleteReviewRecord()">
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+    <div class="form-group">
+    <label class="el-form-item__label">删除已约复盘数据</label>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>咕比学员id：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="review_gubi_id"  name="gubi_id" autocomplete="off" placeholder="咕比学员id"  type="number"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+
+    <button style="margin-left: 30px;"  type="submit" value="更新" class="el-button el-button--success el-button--small1"><!---->
+    <!----><span>确认更新</span>
+    </button>
+    </div>
+</div>
+</form>
+
+<form id="submit_deleta_conversation" onsubmit="event.preventDefault(); DeleteConversation()">
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+    <div class="form-group">
+
+    <label class="el-form-item__label">删除DM系统会话</label>
+    <label style="margin-left: 15px;" ><span data-v-492e78dd="" class="red"> *</span>坐席的企微账号id：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="seat_wechatid"  name="seat_wechatid" autocomplete="off" placeholder="坐席的企微账号id" value="x"
+                   class="el-input__inner" required/><!----><!----><!----><!---->
+        </div><!---->
+    </div>
+    <label style="margin-left: 7px;"><span data-v-492e78dd="" class="red"> *</span>用户的企微昵称：</label>
+    <div class="el-form-item__content">
+        <div data-v-08df61ed="" class="el-input el-input--medium el-input--suffix"><!---->
+            <input id="user_wechatname"  name="user_wechatname" autocomplete="off" placeholder="用户的企微昵称" value="x"
+       class="el-input__inner" required/>
+        </div><!---->
+    </div>
+    <label style="margin-left: 7px;"><span data-v-492e78dd="" class="red"> *</span>业务线：</label>
+        <div class="select-container">
+        <select id="courseType" class="custom-select">
+            <option value="17">围棋</option>
+            <option value="15">社群运营</option>
+            <option value="16">益智LCCP</option>
+        </select>
+        </div>
+
+    <label style="margin-left: 7px;"><span data-v-492e78dd="" class="red"> *</span>清理企微数据：</label>
+        <div class="select-container">
+        <select id="clear_wechat_data" class="custom-select">
+            <option value="0">否</option>
+            <option value="1">是</option>
+        </select>
+        </div>
+
+    <button style="margin-left: 30px;"  type="submit" value="更新" class="el-button el-button--success el-button--small1"><!---->
+    <!----><span>确认删除</span>
+    </button>
+    </div>
+</div>
+<!--<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form&#45;&#45;inline el-form-item el-form-item&#45;&#45;medium">-->
+<!--</div>-->
+</form>
+
+
+<div data-v-08df61ed="" class="app-main el-wrapper-box el-form el-form--inline el-form-item el-form-item--medium">
+</div>
+<br>
+<p style="margin-left: 40px;" >请求结果：</p>
+<div id="result" style="margin-left: 40px;width: 500px;height:200px;"></div>
+</body>
+</html>

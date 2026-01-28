@@ -5,8 +5,7 @@
                 console.log("123123123123123")
                     modalOverlay.style.display = 'block';
             }
-        let mobile=document.getElementById("mobile").value;
-        console.log(mobile+"123")
+        let user_id=document.getElementById("user_id").value;
 //        let refundPrice=document.getElementById("refundPrice").value;
         var envbox=document.getElementById("choose_env");
         radios=envbox.getElementsByTagName("input");
@@ -26,9 +25,10 @@
             }
         }
             var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+            //传参，选择的环境+用户id+课程类型
             var url = '/hualala_consume_hours/py/hualalaConsumeHoursAll'+
                 "?choose_env="+choose_env+
-                "&user_id="+mobile+
+                "&user_id="+user_id+
                 "&course_type="+choose_sku_id;
             httpRequest.open('GET', url, true);//第二步：打开连接
             httpRequest.send();//第三步：发送请求  将请求参数写在URL中

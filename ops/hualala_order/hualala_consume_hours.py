@@ -29,10 +29,6 @@ def hualalaConsumeHours():
     else:
         try:
             res = UserConsumeHoursRun().run(choose_env,userid,course_type)
-            # if result[0]:
-            #     res = {"修改成功",result}
-            # else:
-            #     res = {"修改失败",result}
         except KeyError as e:
             # 异常时，执行该块
             res = {"msg": "出错了", "data": e}

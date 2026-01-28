@@ -15,7 +15,7 @@ import os, time
 # from qcloud_cos import CosS3Client
 
 from lib.py.hualala_applystandardcourser import ApplyStandardCourserRun
-from lib.py.wandou_coming_user import WanDouUserComingRun
+# from lib.py.wandou_coming_user import WanDouUserComingRun
 from conf.readconfig import *
 
 class UserComingRun():
@@ -279,5 +279,3 @@ if __name__ == '__main__':
     # re=UserComingRun().submitUserComing(accessToken,biz_user_id,choose_url)
     print("执行结束88,")
     print(re)
-
-

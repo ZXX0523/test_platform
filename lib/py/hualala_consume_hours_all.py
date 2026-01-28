@@ -43,7 +43,8 @@ class UserConsumeHoursRun():
     # 到课消课记录，查询待消课的记录
     def get_takeAndConsume_list(self,choose_url,Authorization,userid,course_type):
 
-        cms_url = getConfig("liuyi-url", choose_url)
+        cms_url = getConfig("liuyi-gw-mg-url", choose_url)
+        print(cms_url)
         url = '/manager-api/o/course/takeAndConsume/getList'
         headers = {
             'content-type': 'application/json',
@@ -53,7 +54,7 @@ class UserConsumeHoursRun():
                         "page":1,
                         "size":30,
                         "startDate": "2020-01-01",
-                        "endDate": "2025-12-31",
+                        "endDate": "2026-12-31",
                         "courseTimeScheduleId":0,
                         "workGroupId":0,
                         "teacherId":0,
@@ -66,7 +67,7 @@ class UserConsumeHoursRun():
                         "teacherName":""
                        }
         res = requests.get(url=cms_url+url, params=params_data,headers=headers)
-
+        print(json.loads(res.text))
         if json.loads(res.text)["data"]["count"] == 0:
             # print(userid['UserId'])
             print("消课失败")
@@ -90,7 +91,7 @@ class UserConsumeHoursRun():
     # 到课消课记录，操作手动消课
     def commit_manual_consume(self,id,choose_url,Authorization):
 
-        cms_url = getConfig("liuyi-url", choose_url)
+        cms_url = getConfig("liuyi-gw-mg-url", choose_url)
         url = cms_url + '/manager-api/o/course/takeAndConsume/commitManualConsume'
         headers = {
             "authorization": Authorization,
@@ -109,7 +110,7 @@ class UserConsumeHoursRun():
 
     # 消课审核-查询接口
     def query_playback_record(self,choose_url,Authorization,userid):
-        cms_url = getConfig("liuyi-url", choose_url)
+        cms_url = getConfig("liuyi-gw-mg-url", choose_url)
         url = cms_url + '/manager-api/o/apply/playbackRecord/query.json'
         headers = {
             "authorization": Authorization
@@ -135,7 +136,7 @@ class UserConsumeHoursRun():
 
     # 同意消课审核
     def agree_playback_record(self,id,choose_url,Authorization):
-        cms_url = getConfig("liuyi-url", choose_url)
+        cms_url = getConfig("liuyi-gw-mg-url", choose_url)
         url = cms_url + '/manager-api/o/apply/playbackRecord/updateState.json'
         headers = {
             "authorization": Authorization
@@ -156,7 +157,7 @@ class UserConsumeHoursRun():
         return res
 
     def join_class(self,choose_url,user_id):
-        auth_url = getConfig("liuyi-url", choose_url)
+        auth_url = getConfig("liuyi-gw-mg-url", choose_url)
         url_path = "/manager-api/o/new/allocate/group/insideJoinGroup.json?userId="+user_id+"&allocationGroupId=2087&forceJoin=false"
         Authorization=self.getLiuyiToken(choose_url)
         headers = {
@@ -233,12 +234,10 @@ if __name__ == '__main__':
     print("执行开始。。。。")
     env_select = "test" # test, pro
     # Authorization = ''
-    user_id='22621510'
+    user_id='22643861'
     orderNum = '132456'
     course_type=10
-    re=UserConsumeHoursRun().join_class(env_select,user_id)
-    # re=UserConsumeHoursRun().run_comsume_job(env_select,user_id)
-    # re = UserConsumeHoursRun().run(env_select,user_id,course_type)
+    re = UserConsumeHoursRun().run(env_select,user_id,course_type)
     print("执行结束88,",user_id,re)
 
 

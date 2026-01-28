@@ -4,15 +4,13 @@ from datetime import date
 import numpy as np
 
 from bin.runMySQL import mysqlMain
-from conf.readconfig import getConfig
-from lib.py import hualala_applystandardcourser
-from lib.py.hualala_applystandardcourser import ApplyStandardCourserRun
-from lib.py.order_V2_script import *
 import requests
 import json
 import os, time
 from conf.readconfig import *
-# from hualala_applystandardcourser import ApplyStandardCourserRun
+
+from lib.py.hualala_coming_user import UserComingRun
+
 
 # from lib.py.hualala_coming_user import UserComingRun
 

@@ -6,6 +6,7 @@ import flask
 from flask import Flask, render_template, send_from_directory
 from flask_caching import Cache
 
+from ops.DM.dm import dm_gubi
 from ops.hualala_order.hualala_consume_hours import hualala_consume_hours
 from ops.hualala_order.hualala_import_order import hualala_import_order
 from ops.hualala_order.hualala_update_userinfo import hualala_update_userinfo
@@ -38,6 +39,7 @@ app.register_blueprint(hualala_import_order,url_prefix='/hualala_import_order')
 app.register_blueprint(wandou_coming,url_prefix='/wandou_coming')
 app.register_blueprint(app_getSign_api,url_prefix='/getSign_api')
 app.register_blueprint(app_wandou_unbindWechat,url_prefix='/wandou_unbindWechat')
+app.register_blueprint(dm_gubi,url_prefix='/dm_gubi')
 
 
 @app.route('/favicon.ico')
