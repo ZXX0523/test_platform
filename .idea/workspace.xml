@@ -4,26 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="修改页面标题">
-      <change afterPath="$PROJECT_DIR$/lib/py/dm_script.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ops/DM/dm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/dm_gubi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/dm/dm_gubi.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="fcffe815-8338-45c9-bc5b-528d18169a62" name="Changes" comment="加了一些功能">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/conf/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/hualala_applystandardcourser.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/hualala_applystandardcourser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/hualala_coming_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/hualala_coming_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/hualala_consume_hours_all.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/hualala_consume_hours_all.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/hualala_update_userinfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/hualala_update_userinfo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/test3333.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/test3333.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/py/wandou_coming_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/py/wandou_coming_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" beforeDir="false" afterPath="$PROJECT_DIR$/ops/hualala_order/hualala_consume_hours.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/import_order.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/import_order.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/hualalaConsumeHours.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/hualalaConsumeHours.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/hualala_order/hualala_consume_hours.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/hualala_order/hualala_consume_hours.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -397,7 +379,23 @@
       <option name="project" value="LOCAL" />
       <updated>1746777209711</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="加了一些功能">
+      <option name="closed" value="true" />
+      <created>1769588540184</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1769588540184</updated>
+    </task>
+    <task id="LOCAL-00026" summary="加了一些功能">
+      <option name="closed" value="true" />
+      <created>1769588560092</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1769588560092</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -413,6 +411,7 @@
     <MESSAGE value="处理bug，提交订单取错字段" />
     <MESSAGE value="测试提交-" />
     <MESSAGE value="修改页面标题" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改页面标题" />
+    <MESSAGE value="加了一些功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="加了一些功能" />
   </component>
 </project>
