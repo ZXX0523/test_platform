@@ -65,8 +65,6 @@ class Dm_Script():
             wechat_id)
 
         print(sql1)
-        # sql_result1 = database("mysql_hualala_test", "i61-bizcenter-copilot").database_manipulation(operate_sql_type=1,
-        #                                                                                             sql=sql1)
         mysql_conn = mysqlMain('MySQL-Liuyi-test')
         sql_result1 = mysql_conn.fetchall(sql1)
         print(sql_result1)
@@ -77,10 +75,6 @@ class Dm_Script():
         dm_wechat_conversation_id = sql_result1[0]["id"]
         conversation_id =  sql_result1[0]["dify_conversation_id"]
         wechat_id =   sql_result1[0]["wechat_id"]
-
-        # dm_wechat_conversation_id = sql_result1[0][0]
-        # conversation_id = sql_result1[0][13]
-        # wechat_id = sql_result1[0][4]
         print(dm_wechat_conversation_id)
         data = {
             "dm_wechat_conversation_id":dm_wechat_conversation_id,
@@ -104,11 +98,6 @@ class Dm_Script():
         dm_wechat_conversation_id = sql_result1[0]["id"]
         conversation_id =  sql_result1[0]["dify_conversation_id"]
         wechat_id =   sql_result1[0]["wechat_id"]
-
-        # dm_wechat_conversation_id = sql_result1[0][0]
-        # conversation_id = sql_result1[0][13]
-        # wechat_id = sql_result1[0][4]
-
         data = {
             "dm_wechat_conversation_id":dm_wechat_conversation_id,
             "conversation_id":conversation_id,
@@ -367,6 +356,7 @@ class Dm_Script():
         except Exception as e:
             data=f"更新失败: {str(e)}"
             return False, data
+        
     def _fetch_st_ids(self,choose_url, user_id):
         """私有方法：获取用户demo课的st_id列表"""
         if choose_url=="test":
@@ -419,8 +409,8 @@ class Dm_Script():
             print(f"取消st_id {st_id} 时发生错误: {str(e)}")
             return False
 
+    # 取消用户的所有demo课
     def cancel_user_demo_lessons(self, choose_url,user_id):
-        """取消用户的所有demo课"""
         print(f"\n开始处理用户 {user_id} 的demo课...")
 
         st_ids = self._fetch_st_ids(choose_url,user_id)
@@ -437,7 +427,28 @@ class Dm_Script():
             results.append(success)
 
         return True,"取消demo课成功"
+    
+    def delete_help_util_userinfo(self,choose_url,user_id):
+        try:
+            if choose_url == "test":
+                mysql_conn = mysqlMain('MySQL-Gubi-test')
+            else:
+                mysql_conn = mysqlMain('MySQL-Gubi-preprod')
 
+            # if not isinstance(int(win), int) or not isinstance(int(lose), int):
+            #     return False,"对弈次数非正整数"
+            if user_id is not None :
+                sql_delect_extend_info ='DELETE FROM pjx.user_enterprise_extend_info WHERE user_id={};'.format(user_id)
+                sql_delect_extend_info_relation ='DELETE FROM pjx.user_enterprise_extend_info_relation WHERE user_id={};'.format(user_id)
+                mysql_conn.execute(sql_delect_extend_info)
+                mysql_conn.execute(sql_delect_extend_info_relation)
+                return True,"删除助力工具用户信息成功"
+            else:
+                return False, "请输入用户id"
+        except Exception as e:
+            data=f"更新失败: {str(e)}"
+            return False, data
+        
 if __name__ == '__main__':
     print("执行开始。。。。")
     choose_url = "test" # test, pro

@@ -131,3 +131,17 @@ def cancel_user_demo_lessons():
     pass
     print(json.dumps(res, ensure_ascii=False))
     return json.dumps(res, ensure_ascii=False)
+
+@dm_gubi.route('/py/delete_help_util_userinfo')
+def delete_help_util_userinfo():
+    env = flask.request.values.get('env')
+    user_id = flask.request.values.get('user_id')
+    try:
+        res = Dm_Script().delete_help_util_userinfo(env, user_id)
+        print(res)
+    except KeyError as e:
+        # 异常时，执行该块
+        res = {"msg": "处理失败", "code": 201, "data": e}
+    pass
+    print(json.dumps(res, ensure_ascii=False))
+    return json.dumps(res, ensure_ascii=False)
