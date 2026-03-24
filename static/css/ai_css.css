@@ -1,0 +1,466 @@
+/* 全局重置 & 基础变量（保留不变） */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", "PingFang SC", sans-serif;
+}
+
+:root {
+    --primary: #08A993;
+    --primary-light: #eefcfa;
+    --primary-dark: #05A897;
+    --primary-hover: #05A897;
+    --primary-active: #049483;
+    --text-primary: #303133;
+    --text-secondary: #606266;
+    --text-tertiary: #909399;
+    --border: #e4e7ed;
+    --border-hover: #dcdfe6;
+    --bg-main: #f5f7fa;
+    --bg-card: #ffffff;
+    --bg-tab: #f2f3f5;
+    --bg-highlight: #fafafa;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --transition: all 0.2s ease;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0;
+    font-size: 14px;
+    overflow: auto;
+}
+
+/* 页面标题 */
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 6px;
+    margin-left: 0;
+}
+
+.page-desc {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+/* 环境选择卡片（dm_gubi专用） */
+.env-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+}
+
+.env-title {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* 红色星号 */
+.red {
+    color: #f56c6c;
+    margin-right: 4px;
+}
+
+/* 单选按钮样式 */
+.el-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.el-radio-button {
+    height: 36px;
+    line-height: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 13px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.el-radio-button--small {
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 12px !important;
+}
+
+.el-radio-button--small .el-radio-button__inner {
+    padding: 0 15px !important;
+}
+
+.el-radio-button:first-child {
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    border-right: none;
+}
+
+.el-radio-button:last-child {
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.el-radio-button.is-active {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 500;
+}
+
+.el-radio-button.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+}
+
+.el-radio-button:hover:not(.is-active) {
+    border-color: var(--border-hover);
+    background: var(--bg-highlight);
+}
+
+.el-radio-button__inner {
+    padding: 0 18px;
+    display: inline-block;
+}
+
+.el-radio-button__orig-radio {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+/* 标签页样式（dm_gubi专用） */
+.tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg-tab);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    /* margin-bottom: 20px; */
+    flex-wrap: wrap;
+    border: 1px solid var(--border);
+}
+
+.tab-item {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.tab-item.active {
+    background: var(--bg-card);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.tab-item:hover:not(.active) {
+    color: var(--primary);
+    background: var(--primary-light);
+    opacity: 0.8;
+}
+
+/* ========== 核心修改：表单面板样式 ========== */
+/* 1. 默认显示所有form-panel（优先保证消课页面） */
+.form-panel {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    display: block !important; /* 强制显示，最高优先级 */
+}
+
+/* 2. 仅给dm_gubi页面的form-panel添加隐藏逻辑（通过父容器区分） */
+/* dm_gubi页面需在form-panel外层加 .dm-gubi-page 类 */
+.dm-gubi-page .form-panel {
+    display: none !important;
+}
+.dm-gubi-page .form-panel.active {
+    display: block !important;
+}
+
+/* 表单网格布局 */
+.form-grid {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 12px 20px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: right;
+}
+
+.form-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* 输入框样式 */
+.el-input__inner {
+    border: 1px solid var(--border);
+    height: 38px;
+    border-radius: var(--radius-sm);
+    padding: 0 15px;
+    font-size: 13px;
+    color: var(--text-primary);
+    transition: var(--transition);
+    min-width: 200px;
+    width: 100%;
+    max-width: 300px;
+    background: var(--bg-card);
+    outline: none;
+}
+
+.el-input__inner::placeholder {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.el-input__inner:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(8, 169, 147, 0.2);
+}
+
+.el-input__inner:hover {
+    border-color: var(--border-hover);
+}
+/* 多行文本框样式（textarea） */
+.el-textarea__inner {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 15px;
+    font-size: 13px;
+    color: var(--text-primary);
+    transition: var(--transition);
+    min-width: 200px;
+    width: 100%;
+    max-width: 500px; /* 比单行输入框宽一些，适配多行输入 */
+    min-height: 100px; /* 默认高度 */
+    background: var(--bg-card);
+    outline: none;
+    resize: vertical; /* 仅允许垂直拉伸 */
+    line-height: 1.5;
+    font-family: "Microsoft Yahei", "PingFang SC", sans-serif;
+}
+
+/* 占位符样式 */
+.el-textarea__inner::placeholder {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+/* 聚焦样式 */
+.el-textarea__inner:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(8, 169, 147, 0.2);
+}
+
+/* 悬停样式 */
+.el-textarea__inner:hover {
+    border-color: var(--border-hover);
+}
+
+/* 禁用样式（和按钮禁用风格统一） */
+.el-textarea__inner:disabled {
+    background: #f5f5f5 !important;
+    color: var(--text-tertiary) !important;
+    cursor: not-allowed !important;
+    border-color: var(--border) !important;
+}
+/* 下拉选择框（dm_gubi专用） */
+.custom-select {
+    height: 38px;
+    padding: 0 15px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 120px;
+    width: 100%;
+    max-width: 180px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23909399' viewBox='0 0 24 24'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px;
+    outline: none;
+}
+
+.custom-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(8, 169, 147, 0.2);
+}
+
+/* 按钮样式 */
+.el-button {
+    background: var(--primary);
+    height: 38px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    padding: 0 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 100px;
+    box-shadow: none;
+    margin-left: 0;
+}
+
+.el-button:hover {
+    background: var(--primary-hover);
+}
+
+.el-button:active {
+    background: var(--primary-active);
+}
+
+/* 结果区域样式 */
+.result-section {
+    margin-top: 2px;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.result-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    background: var(--bg-highlight);
+}
+
+.result-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.result-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    font-size: 12px;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.action-btn:hover {
+    color: var(--primary-hover);
+}
+
+#result {
+    height: 280px;
+    padding: 16px;
+    overflow-y: auto;
+    font-family: "Consolas", "Microsoft Yahei", monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    width: 100%;
+    margin-left: 0;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tab);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-tertiary);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+.el-button:disabled {
+    background: #ccc !important;
+    color: #999 !important;
+    cursor: not-allowed !important;
+}
+/* 响应式适配 */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-label {
+        text-align: left;
+        padding-bottom: 4px;
+    }
+
+    .env-card, .form-panel, .result-section {
+        padding: 12px;
+    }
+
+    .tabs {
+        padding: 2px;
+    }
+
+    .tab-item {
+        padding: 6px 12px;
+    }
+
+    #result {
+        height: 200px;
+        padding: 12px;
+    }
+}

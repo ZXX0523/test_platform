@@ -3,6 +3,7 @@ import json
 import flask
 from flask import Blueprint
 from flask import render_template
+from urllib.parse import unquote
 
 from lib.py.dm_script import Dm_Script
 
@@ -58,10 +59,12 @@ def delete_conversation():
     return json.dumps(res, ensure_ascii=False)
 @dm_gubi.route('/py/insert_chat_data')
 def insert_chat_data():
+    data_str = unquote(flask.request.args.get('data_str'))
+
     env = flask.request.values.get('env')
     user_id = flask.request.values.get('user_id')
     external_user_id = flask.request.values.get('external_user_id')
-    data_str = flask.request.values.get('data_str')
+    # data_str = flask.request.values.get('data_str')
     brand_code = flask.request.values.get('brand_code')
     # 输入校验
     try:

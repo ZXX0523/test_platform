@@ -1,10 +1,17 @@
  function ConsumeHours(){
         document.getElementById("result").innerText = "消课中，请等待...";
-        var modalOverlay = document.querySelector('.modal-overlay');
-            if  (document.getElementById("result").innerText ="消课中，请等待..."){
-                console.log("123123123123123")
-                    modalOverlay.style.display = 'block';
-            }
+        // var modalOverlay = document.querySelector('.el-button--overlay');
+        //     if  (document.getElementById("result").innerText ="消课中，请等待..."){
+        //         // console.log("123123123123123")
+        //             modalOverlay.style.display = 'block';
+        //     }
+        // 1. 获取按钮元素
+        const btn = document.querySelector('.el-button');
+        // 2. 点击后立即禁用按钮（置灰）
+        btn.disabled = true;
+        btn.innerText = '提交中...';
+
+
         let user_id=document.getElementById("user_id").value;
 //        let refundPrice=document.getElementById("refundPrice").value;
         var envbox=document.getElementById("choose_env");
@@ -37,7 +44,9 @@
                      var json = httpRequest.responseText;//获取到json字符串，还需解析
                     console.log(json);
                     document.getElementById("result").innerText = json;
-                    modalOverlay.style.display = 'none';
+                    // modalOverlay.style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerText = '确认消课';
                     }
                 }
         }

@@ -200,10 +200,15 @@ class Dm_Script():
             return False, "执行异常"
 
     def insert_user_chat_data(self,env,user_id,external_user_id,data_str,brand_code):
+
         data_str = re.sub(r'[\x00-\x1F]|\x7F', '', data_str)  # 删除控制字符
         data_str = re.sub(r'\\(?![/u"])', r'', data_str)  # 修复非法反斜杠
         cleaned_data = data_str.encode('utf-8', errors='ignore').decode('utf-8')
         data = json.loads(cleaned_data)
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         try:
             # 获取当前时间戳（秒级）
             current_timestamp = int(time.time() * 1000)
@@ -228,10 +233,6 @@ class Dm_Script():
                 sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,content,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'text','send', '{}' , '{}' ,'{}' ,NULL,'{}' , '{}' ,2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code,seq,msg_id,from_user,to_user,external_user_id,current_timestamp,content)
                 print(sql)
                 # 执行插入
-                if env=='test':
-                    mysql_conn = mysqlMain('MySQL-Liuyi-test')
-                else:
-                    mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
 
                 sql_result1=mysql_conn.execute(sql)
                 print(sql_result1)
@@ -448,7 +449,8 @@ class Dm_Script():
         except Exception as e:
             data=f"更新失败: {str(e)}"
             return False, data
-        
+
+                    
 if __name__ == '__main__':
     print("执行开始。。。。")
     choose_url = "test" # test, pro

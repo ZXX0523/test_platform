@@ -168,6 +168,47 @@ function UpdateUserInfo(){
                 }
         }
 
+function InsertChatData(){
+        document.getElementById("result").innerText = "修改中...";
+        // 1. 获取按钮元素
+        const btn = document.getElementById("insert-chat-data-btn")
+        // 2. 点击后立即禁用按钮（置灰）
+        btn.disabled = true;
+        btn.innerText = '提交中...';
+
+        let seat_wechatid=document.getElementById("chat_seat_wechatid").value;
+        let user_wechatname=document.getElementById("chat_user_wechatname").value;
+        let subject_id = document.getElementById('chat_courseType').value;
+        let chat_message_data_str = document.getElementById('chat_message_data_str').value;
+        var envbox=document.getElementById("choose_env");
+        radios=envbox.getElementsByTagName("input");
+        for(i=0;i<radios.length;i++){
+            if(radios[i].checked===true){
+                 var choose_env = radios[i].value;
+                 console.log(choose_env);
+                }
+            }
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        var url = '/dm_gubi/py/insert_chat_data'+
+                "?env="+choose_env+
+                "&user_id="+seat_wechatid+
+                "&external_user_id="+user_wechatname+
+                "&brand_code="+subject_id+
+                "&data_str="+chat_message_data_str;
+        httpRequest.open('GET', url, true);//第二步：打开连接
+        httpRequest.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+                var json = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(json);
+                document.getElementById("result").innerText = json;
+                btn.disabled = false;
+                btn.innerText = '确认插入数据';
+                }
+            }
+        }
+
 function getCurrentDate() {
     const date = new Date();
     const year = date.getFullYear();
