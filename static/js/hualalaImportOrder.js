@@ -67,18 +67,23 @@
             const env = currentEnv;
             const packageType = currentPackageType;
             
+            // 改用 class 或 ID 来定位，避免使用动态变化的 value
             const radioElements = {
-                course1: document.querySelector('input[name="choose_sku"][value="1955,1963,1826"]'),
-                course2: document.querySelector('input[name="choose_sku"][value="313,1989"]'),
-                course3: document.querySelector('input[name="choose_sku"][value="201,206,207,2118"]'),
-                course4: document.querySelector('input[name="choose_sku"][value="202,209"]'),
-                course5: document.querySelector('input[name="choose_sku"][value="301,302,303,304"]'),
-                course6: document.querySelector('input[name="choose_sku"][value="309,310,311,312"]'),
-                course7: document.querySelector('input[name="choose_sku"][value="2395,2394"]')
+                course1: document.querySelector('#choose_sku .el-radio-button:first-child input[type="radio"]'),
+                course7: document.querySelector('#choose_sku .el-radio-button:nth-child(2) input[type="radio"]'),
+                course2: document.querySelector('#choose_sku .el-radio-button:nth-child(3) input[type="radio"]'),
+                course3: document.querySelector('#choose_sku .el-radio-button:nth-child(4) input[type="radio"]'),
+                course4: document.querySelector('#choose_sku .el-radio-button:nth-child(5) input[type="radio"]'),
+                course5: document.querySelector('#choose_sku .el-radio-button:nth-child(6) input[type="radio"]'),
+                course6: document.querySelector('#choose_sku .el-radio-button:nth-child(7) input[type="radio"]')
             };
+            
+            // 或者使用原来的方式，但添加调试日志
+            console.log('更新套餐值，当前环境:', env, '套餐类型:', packageType);
             
             if (env === 'test') {
                 if (packageType === 'apply') {
+                    // UAT环境 + 首报全款
                     if (radioElements.course1) radioElements.course1.value = '1955,1963,1826';
                     if (radioElements.course2) radioElements.course2.value = '313,314,1989';
                     if (radioElements.course3) radioElements.course3.value = '201,206,207,2118,2325,2328,2388';
@@ -86,7 +91,9 @@
                     if (radioElements.course5) radioElements.course5.value = '301,302,303,304';
                     if (radioElements.course6) radioElements.course6.value = '310,311,312,309';
                     if (radioElements.course7) radioElements.course7.value = '1957,1958,2394,2395';
+                    console.log('UAT首报: 1课时=', radioElements.course1?.value);
                 } else {
+                    // UAT环境 + 续费全款
                     if (radioElements.course1) radioElements.course1.value = '1812,2424';
                     if (radioElements.course2) radioElements.course2.value = '1936,2013';
                     if (radioElements.course3) radioElements.course3.value = '173,176,179,1960,2377,2391,2421';
@@ -94,9 +101,11 @@
                     if (radioElements.course5) radioElements.course5.value = '463,464,465,466,1965';
                     if (radioElements.course6) radioElements.course6.value = '370,371,372,373';
                     if (radioElements.course7) radioElements.course7.value = '2380';
+                    console.log('UAT续费: 1课时=', radioElements.course1?.value);
                 }
             } else {
                 if (packageType === 'apply') {
+                    // 预发布环境 + 首报全款
                     if (radioElements.course1) radioElements.course1.value = '1593';
                     if (radioElements.course2) radioElements.course2.value = '313,314';
                     if (radioElements.course3) radioElements.course3.value = '200,201,206,207,1623';
@@ -104,15 +113,24 @@
                     if (radioElements.course5) radioElements.course5.value = '301,302,303,304';
                     if (radioElements.course6) radioElements.course6.value = '310,311,312';
                     if (radioElements.course7) radioElements.course7.value = '1589';
+                    console.log('预发首报: 1课时=', radioElements.course1?.value);
                 } else {
-                    if (radioElements.course1) radioElements.course1.value = '0';
+                    // 预发布环境 + 续费全款
+                    if (radioElements.course1) radioElements.course1.value = '';
                     if (radioElements.course2) radioElements.course2.value = '1610';
                     if (radioElements.course3) radioElements.course3.value = '170,173,176,179,1619,1622';
                     if (radioElements.course4) radioElements.course4.value = '235,236,272,275,278,281';
                     if (radioElements.course5) radioElements.course5.value = '464,465,466';
                     if (radioElements.course6) radioElements.course6.value = '370,371,372,373';
-                    if (radioElements.course7) radioElements.course7.value = '0';
+                    if (radioElements.course7) radioElements.course7.value = '';
+                    console.log('预发续费: 1课时=', radioElements.course1?.value);
                 }
+            }
+            
+            // 打印当前选中的套餐期长值，用于调试
+            const selectedSku = document.querySelector('input[name="choose_sku"]:checked');
+            if (selectedSku) {
+                console.log('当前选中的套餐期长value:', selectedSku.value);
             }
         }
 
@@ -269,11 +287,19 @@
             if (coupon_id === '无') coupon_id = '0';
             
             const mobile = mobileInput.value.trim();
+            // 校验手机号是否为空
             if (!mobile) {
                 showResult('请输入学员手机号');
+                // 可选：给输入框添加红色边框提示
+                if (mobileInput) {
+                    mobileInput.style.borderColor = '#f56c6c';
+                    mobileInput.focus();
+                    setTimeout(() => {
+                        mobileInput.style.borderColor = '';
+                    }, 2000);
+                }
                 return;
             }
-            
             ImportOrder(sku_id, marketing_id, currentEnv, coupon_id, currentPackageType, mobile);
         };
         

@@ -220,7 +220,7 @@ class ApplyStandardCourserRun():
         else:
             user_id = userinfo['UserId']
             remark_name = userinfo['RemarkName']
-            gw_url = getConfig("liuyi-url", choose_url)
+            gw_url = getConfig("liuyi-gw-mg-url", choose_url)
             Authorization = self.getLiuyiToken(choose_url)
             url_path = '/manager-api/o/renewal/upgrade/submit'
             headers = {
