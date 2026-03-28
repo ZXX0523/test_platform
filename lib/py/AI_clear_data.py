@@ -348,7 +348,22 @@ def update_user_baseinfo(mobile,environment):
         return False
     finally:
         del mysql_conn
-           
+def update_user_lockstatus(userid,environment=None):
+    if environment == "test":
+        mysql_conn =pymysql.connect(host='10.4.32.47', port=3306, user='shdev', password='6JrpIH4DbtE1w2YH', db='eos_basic', charset='utf8')
+    else:
+        mysql_conn =pymysql.connect(host='preprod-public-mysql-rw.vipthink.net', port=3306, user='ywxt', password='YW4sLR910Ndt', db='eos_basic', charset='utf8')
+    cursor = mysql_conn.cursor()
+    sql = f"update eos_basic.user_biz set lock_status = 2 where unification_id = {userid};"
+    try:
+        cursor.execute(sql)
+        mysql_conn.commit()
+    except Exception as e:
+        mysql_conn.rollback()
+        print("数据修改失败：", e)
+    finally:
+        cursor.close()
+        mysql_conn.close()          
 if __name__ == '__main__':
     print("执行开始。。。。")
     choose_url = "test" # test, pro
@@ -363,7 +378,8 @@ if __name__ == '__main__':
     
     # re=select_user_pool_relation(60000617,11,"test")
     # re=update_user_baseinfo('12026316742',"test")
-    re=update_user_baseinfo('12026319510',"pre")
+    # re=update_user_baseinfo('12026319510',"pre")
+    re= update_user_lockstatus(12205221,"test")
     
     # re = UpdateUserInfoRun().UpdateUserInfo(orderNum,choose_url)
     print("执行结束,",re)

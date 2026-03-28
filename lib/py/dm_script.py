@@ -230,10 +230,14 @@ class Dm_Script():
                     to_user = external_user_id
                 print(seq,msg_id,from_user,to_user,to_user,current_timestamp,content)
                 # 构造插入语句
-                sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,content,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'text','send', '{}' , '{}' ,'{}' ,NULL,'{}' , '{}' ,2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code,seq,msg_id,from_user,to_user,external_user_id,current_timestamp,content)
-                print(sql)
-                # 执行插入
+                if '【图片】' in content:                    
+                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,file_sdk_id,file_size,file_md5,file_url,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'image','send', '{}' , '{}' ,'{}' ,NULL,'{}' ,'CtYBMzA2OTAyMDEwMjA0NjIzMDYwMDIwMTAwMDIwNDNhOWYwODEwMDIwMzBmNGRmYjAyMDQyNjQxZTg3ODAyMDQ2ODQyNjMyZDA0MjQzMzYyMzE2MTM0NjQzNDM1MmQzOTMyNjYzMTJkMzQzNjMyNjEyZDM4NjM2MjMwMmQzNTYyMzMzMzMxMzkzNzY2NjE2MzYzMzYwMjAxMDAwMjAzMDUzMWYwMDQxMDM4MTVlZGVmMjRmMmEyNWY2ZTE0YjU4Y2JiYjc0M2NkMDIwMTAyMDIwMTAwMDQwMBI4TkRkZk1UWTRPRGcxTlRFek9EY3pNakEwT0Y4eE5UVXpNams1T1RnM1h6RTNORGt4T0RFeU16TT0aIGE4ZTE4NWJmOGQ2NDQ3MGU5YTczOTQ5MWJmNjU5MmRm',340462,'3815edef24f2a25f6e14b58cbbb743cd3815edef24f2a25f6e14b58cbbb743cd','https://hualala-common.oss-cn-shenzhen.aliyuncs.com/test/corporate-wechat-backend/6842c73145c657000140e748.png',2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code,seq,msg_id,from_user,to_user,external_user_id,current_timestamp)                
 
+                else:
+                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,content,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'text','send', '{}' , '{}' ,'{}' ,NULL,'{}' , '{}' ,2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code,seq,msg_id,from_user,to_user,external_user_id,current_timestamp,content)
+
+                # print(sql)
+                # 执行插入操作
                 sql_result1=mysql_conn.execute(sql)
                 print(sql_result1)
                 # 可以根据需要调整时间戳（如果需要更精确的时间顺序）
