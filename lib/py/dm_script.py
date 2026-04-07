@@ -10,6 +10,8 @@ import time
 from bin.runMySQL import mysqlMain
 
 import re
+
+from bin.runMySQL import mysqlMain
 class Dm_Script():
     def UpdateUserOpenclasstime(self,choose_url,external_user,open_class_time):
 
@@ -453,7 +455,71 @@ class Dm_Script():
         except Exception as e:
             data=f"更新失败: {str(e)}"
             return False, data
-
+      
+    def clear_learning_situation_data(self, choose_url, student_id, node_ids):
+        """
+        根据student_id和node_ids删除学习情况数据
+        同时如果intervention_task_id不为0，也删除对应的干预任务数据
+        """
+        # 初始化数据库连接
+        if choose_url == "test":
+            mysql_conn = mysqlMain('MySQL-ob-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-ob-preprod')
+        
+        try:
+            # 将node_ids字符串分割成数组
+            if isinstance(node_ids, str):
+                node_id_list = node_ids.split(',')
+            else:
+                node_id_list = [str(node_ids)]
+            
+            results = []
+            success_count = 0
+            not_found_count = 0
+            
+            for node_id in node_id_list:
+                node_id = node_id.strip()
+                if not node_id:
+                    continue
+                    
+                # 查询数据
+                query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_id = %s AND is_deleted = 0"
+                result = mysql_conn.fetchone(query, (student_id, node_id))
+                
+                if result:
+                    # 获取intervention_task_id
+                    intervention_task_id = result.get('intervention_task_id', 0)
+                    
+                    # 标记学习情况数据为已删除
+                    update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_id = %s"
+                    mysql_conn.execute(update_query, (student_id, node_id))
+                    print(f"已标记学习情况数据为已删除，student_id: {student_id}, node_id: {node_id}")
+                    
+                    # 如果intervention_task_id不为0，标记对应的干预任务数据为已删除
+                    if intervention_task_id != 0:
+                        update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
+                        mysql_conn.execute(update_intervention_query, (intervention_task_id,))
+                        print(f"已标记干预任务数据为已删除，intervention_task_id: {intervention_task_id}")
+                    
+                    results.append(f"节点{node_id}: 操作成功")
+                    success_count += 1
+                else:
+                    print(f"未找到学习情况数据，student_id: {student_id}, node_id: {node_id}")
+                    results.append(f"节点{node_id}: 未找到学习情况数据")
+                    not_found_count += 1
+            
+            # 返回汇总结果
+            if success_count > 0:
+                return True, f"成功清理{success_count}个节点，详细信息：{'; '.join(results)}"
+            else:
+                return False, f"所有节点均未找到数据。详细信息：{'; '.join(results)}"
+                
+        except Exception as e:
+            print(f"操作失败: {str(e)}")
+            return False, f"操作失败: {str(e)}"
+        finally:
+            del mysql_conn
                     
 if __name__ == '__main__':
     print("执行开始。。。。")

@@ -148,3 +148,18 @@ def delete_help_util_userinfo():
     pass
     print(json.dumps(res, ensure_ascii=False))
     return json.dumps(res, ensure_ascii=False)
+
+@dm_gubi.route('/py/clear_learning_situation_data')
+def clear_learning_situation_data():
+    env = flask.request.values.get('env')
+    student_id = flask.request.values.get('student_id')
+    node_ids = flask.request.values.get('node_ids')
+    try:
+        res = Dm_Script().clear_learning_situation_data(env, student_id, node_ids)
+        print(res)
+    except KeyError as e:
+        # 异常时，执行该块
+        res = {"msg": "处理失败", "code": 201, "data": e}
+    pass
+    print(json.dumps(res, ensure_ascii=False))
+    return json.dumps(res, ensure_ascii=False)

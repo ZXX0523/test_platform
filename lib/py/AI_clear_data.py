@@ -1,5 +1,5 @@
 
-# from bin.runMySQL import mysqlMain
+from bin.runMySQL import mysqlMain
 
 import pymysql
 class UpdateUserInfoRun():
@@ -364,6 +364,45 @@ def update_user_lockstatus(userid,environment=None):
     finally:
         cursor.close()
         mysql_conn.close()          
+        
+def clear_learning_situation_data(student_id, node_id, choose_url="test"):
+    """
+    根据student_id和node_id删除学习情况数据
+    同时如果intervention_task_id不为0，也删除对应的干预任务数据
+    """
+    # 初始化数据库连接
+    if choose_url == "test":
+        mysql_conn = mysqlMain('MySQL-ob-test')
+    else:
+        mysql_conn = mysqlMain('MySQL-ob-preprod')
+    
+    try:
+        # 查询数据
+        query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_id = %s AND is_deleted = 0"
+        result = mysql_conn.fetchone(query, (student_id, node_id))
+        
+        if result:
+            # 获取intervention_task_id
+            intervention_task_id = result.get('intervention_task_id', 0)
+            
+            # 标记学习情况数据为已删除
+            update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_id = %s"
+            mysql_conn.execute(update_query, (student_id, node_id))
+            print(f"已标记学习情况数据为已删除，student_id: {student_id}, node_id: {node_id}")
+            
+            # 如果intervention_task_id不为0，标记对应的干预任务数据为已删除
+            if intervention_task_id != 0:
+                update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
+                mysql_conn.execute(update_intervention_query, (intervention_task_id,))
+                print(f"已标记干预任务数据为已删除，intervention_task_id: {intervention_task_id}")
+        else:
+            print(f"未找到学习情况数据，student_id: {student_id}, node_id: {node_id}")
+            
+    except Exception as e:
+        print(f"操作失败: {str(e)}")
+    finally:
+        del mysql_conn
+
 if __name__ == '__main__':
     print("执行开始。。。。")
     choose_url = "test" # test, pro
