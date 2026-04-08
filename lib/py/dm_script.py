@@ -6,6 +6,7 @@ import re
 import requests
 import json
 import time
+import redis
 
 from bin.runMySQL import mysqlMain
 
@@ -13,6 +14,27 @@ import re
 
 from bin.runMySQL import mysqlMain
 class Dm_Script():
+    def _delete_redis_key(self, choose_url, key_pattern):
+        """
+        通用方法：删除Redis键
+        """
+        try:
+            # 根据环境选择Redis主机地址
+            if choose_url == "test":
+                redis_host = 'redis-test.61info.cn'
+            else:
+                redis_host = 'preprod1.61draw.com'
+            
+            redis_client = redis.Redis(host=redis_host, port=6379, db=7)
+            if redis_client.exists(key_pattern):
+                redis_client.delete(key_pattern)
+                print(f"已删除Redis缓存键: {key_pattern}")
+            else:
+                print(f"Redis缓存键不存在: {key_pattern}")
+            redis_client.close()
+        except Exception as redis_e:
+            print(f"删除Redis缓存失败: {str(redis_e)}")
+            # 不影响主流程，继续执行
     def UpdateUserOpenclasstime(self,choose_url,external_user,open_class_time):
 
         if choose_url == "test":
@@ -29,6 +51,9 @@ class Dm_Script():
             sql1 = "UPDATE enrollment SET open_course_time = '{}' WHERE id = '{}';".format(open_class_time,enrollment_id)
             try:
                 mysql_conn.execute(sql1)
+                # 调用通用方法删除Redis缓存键
+                redis_key = f"i61-eos-copilot:cache:pjx:getUserOpenCourseTimeList{external_user}_1"
+                self._delete_redis_key(choose_url, redis_key)
             except Exception as e:
                 return False, "执行异常",
             str="开课日更新为：",open_class_time
@@ -318,6 +343,10 @@ class Dm_Script():
                     mysql_conn.execute(sql_lose_insert)
                     lose_count += 1  # 等价于 A = A + 1
                     print(f"插入第：{lose_count}条数据")  # 打印过程，可根据需要删除
+                # 调用通用方法删除Redis缓存键
+                redis_key = f"i61-eos-copilot:cache:pjx:getUserPlayChessData{user_id}"
+                self._delete_redis_key(choose_url, redis_key)
+                
                 return True,"对弈数据更新成功"
             else:
                 return False, "对弈数据更新成功"
@@ -449,6 +478,10 @@ class Dm_Script():
                 sql_delect_extend_info_relation ='DELETE FROM pjx.user_enterprise_extend_info_relation WHERE user_id={};'.format(user_id)
                 mysql_conn.execute(sql_delect_extend_info)
                 mysql_conn.execute(sql_delect_extend_info_relation)
+                # 调用通用方法删除Redis缓存键
+                redis_key = f"i61-eos-copilot:cache:pjxCache:userExInfo:{user_id}"
+                self._delete_redis_key(choose_url, redis_key)
+                
                 return True,"删除助力工具用户信息成功"
             else:
                 return False, "请输入用户id"
