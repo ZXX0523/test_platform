@@ -623,3 +623,97 @@ body {
         .table-btn:active {
             background: var(--primary-active);
         }
+
+        /* 自定义复选框样式 */
+        .custom-checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .custom-checkbox span {
+            position: relative;
+            padding-left: 25px;
+            font-size: 14px;
+        }
+        .custom-checkbox span:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            background-color: white;
+        }
+        .custom-checkbox input[type="checkbox"]:checked + span:before {
+            background-color: #50C8B9;
+            border-color: #50C8B9;
+        }
+        .custom-checkbox input[type="checkbox"]:checked + span:after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* 悬停提示样式 */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+        }
+        .tooltip:before {
+            content: "i";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #409eff;
+            color: white;
+            font-size: 12px;
+            font-style: normal;
+        }
+        .tooltip:hover:before {
+            background-color: #66b1ff;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 300px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            padding: 5px 10px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }

@@ -153,9 +153,9 @@ def delete_help_util_userinfo():
 def clear_learning_situation_data():
     env = flask.request.values.get('env')
     student_id = flask.request.values.get('student_id')
-    node_ids = flask.request.values.get('node_ids')
+    node_types = flask.request.values.get('node_types')
     try:
-        res = Dm_Script().clear_learning_situation_data(env, student_id, node_ids)
+        res = Dm_Script().clear_learning_situation_data(env, student_id, node_types)
         print(res)
     except KeyError as e:
         # 异常时，执行该块

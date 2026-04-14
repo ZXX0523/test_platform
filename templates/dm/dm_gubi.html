@@ -52,12 +52,12 @@
     <div class="form-panel active" id="tab1">
         <form id="submitorder" onsubmit="event.preventDefault(); UpdateUserInfo();">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>咕比学员id：</label>
+                <label class="form-label"><span class="red">*</span>咕比学员id</label>
                 <div class="form-control">
                     <input id="userid" type="number" name="mobile" autocomplete="off" placeholder="请输入咕比学员id"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>开课日期：</label>
+                <label class="form-label"><span class="red">*</span>开课日期</label>
                 <div class="form-control">
                     <input id="opencourseday" name="opencourseday" autocomplete="off" placeholder="请输入开课日期（例：2024-01-01）"
                            class="el-input__inner" required/>
@@ -75,12 +75,12 @@
     <div class="form-panel" id="tab2">
         <form id="update_course_finished_status" onsubmit="event.preventDefault(); FinishedStatus()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>咕比学员id：</label>
+                <label class="form-label"><span class="red">*</span>咕比学员id</label>
                 <div class="form-control">
                     <input id="gubi_id" name="gubi_id" autocomplete="off" placeholder="请输入咕比学员id" type="number"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>是否完课：</label>
+                <label class="form-label"><span class="red">*</span>是否完课</label>
                 <div class="form-control">
                     <select id="finished_status" class="custom-select">
                         <option value="1">是</option>
@@ -99,17 +99,17 @@
     <div class="form-panel" id="tab3">
         <form id="update_go_pk_record" onsubmit="event.preventDefault(); PkRecord()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>咕比学员id：</label>
+                <label class="form-label"><span class="red">*</span>咕比学员id</label>
                 <div class="form-control">
                     <input id="user_id_pk" name="gubi_id" autocomplete="off" placeholder="请输入咕比学员id" type="number"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>赢的局数：</label>
+                <label class="form-label"><span class="red">*</span>赢的局数</label>
                 <div class="form-control">
                     <input id="win_num" name="win_num" autocomplete="off" placeholder="赢的局数" type="number"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>输的局数：</label>
+                <label class="form-label"><span class="red">*</span>输的局数</label>
                 <div class="form-control">
                     <input id="lose_num" name="lose_num" autocomplete="off" placeholder="输的局数" type="number"
                            class="el-input__inner" required/>
@@ -126,7 +126,7 @@
     <div class="form-panel" id="tab4">
         <form id="delete_review_record" onsubmit="event.preventDefault(); DeleteReviewRecord()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>咕比学员id：</label>
+                <label class="form-label"><span class="red">*</span>咕比学员id</label>
                 <div class="form-control">
                     <input id="review_gubi_id" name="gubi_id" autocomplete="off" placeholder="请输入咕比学员id" type="number"
                            class="el-input__inner" required/>
@@ -143,7 +143,7 @@
     <div class="form-panel" id="tab5">
         <form id="delete_help_util_userinfo" onsubmit="event.preventDefault(); DeleteHelpUtilUserinfo()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>咕比学员id：</label>
+                <label class="form-label"><span class="red">*</span>咕比学员id</label>
                 <div class="form-control">
                     <input id="help_gubi_id" name="gubi_id" autocomplete="off" placeholder="请输入咕比学员id" type="number"
                            class="el-input__inner" required/>
@@ -160,17 +160,17 @@
     <div class="form-panel" id="tab6">
         <form id="submit_deleta_conversation" onsubmit="event.preventDefault(); DeleteConversation()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>坐席的企微账号id：</label>
+                <label class="form-label"><span class="red">*</span>坐席的企微账号id</label>
                 <div class="form-control">
                     <input id="seat_wechatid" name="seat_wechatid" autocomplete="off" placeholder="请输入AI坐席管理页面的账号ID"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>用户的企微昵称：</label>
+                <label class="form-label"><span class="red">*</span>用户的企微昵称</label>
                 <div class="form-control">
                     <input id="user_wechatname" name="user_wechatname" autocomplete="off" placeholder="请输入对话管理页面的微信昵称"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>业务线：</label>
+                <label class="form-label"><span class="red">*</span>业务线</label>
                 <div class="form-control">
                     <select id="courseType" class="custom-select">
                         <option value="17">围棋</option>
@@ -178,7 +178,7 @@
                         <option value="16">益智LP</option>
                     </select>
                 </div>
-                <label class="form-label"><span class="red">*</span>清理企微数据：</label>
+                <label class="form-label"><span class="red">*</span>清理企微数据<span class="tooltip"><span class="tooltip-text">删除跟学员的绑定关系和企微会话存档的聊天记录</span></span></label>
                 <div class="form-control">
                     <select id="clear_wechat_data" class="custom-select">
                         <option value="0">否</option>
@@ -195,17 +195,17 @@
     <div class="form-panel" id="tab7">
         <form id="submit_deleta_conversation" onsubmit="event.preventDefault(); InsertChatData()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>坐席的企微账号id：</label>
+                <label class="form-label"><span class="red">*</span>坐席的企微账号id</label>
                 <div class="form-control">
                     <input id="chat_seat_wechatid" name="seat_wechatid" autocomplete="off" placeholder="请输入AI坐席管理页面的账号ID"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>用户的微信id：</label>
+                <label class="form-label"><span class="red">*</span>用户的微信id</label>
                 <div class="form-control">
                     <input id="chat_user_wechatname" name="user_wechatname" autocomplete="off" placeholder="请输入对话管理页面的微信ID"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>业务线：</label>
+                <label class="form-label"><span class="red">*</span>业务线</label>
                 <div class="form-control">
                     <select id="chat_courseType" class="custom-select">
                         <option value="AI">围棋</option>
@@ -213,7 +213,7 @@
                         <option value="WANDOU">豌豆</option>
                     </select>
                 </div>
-                <label class="form-label"><span class="red">*</span>聊天数据：</label>
+                <label class="form-label"><span class="red">*</span>聊天数据<span class="tooltip"><span class="tooltip-text">数据是插入企微会话存档表(cw_chat_data)</span></span></label>
                 <div class="form-control">
                     <textarea class="el-textarea__inner" id="chat_message_data_str" name="message_data_str" placeholder="请输入聊天数据" required>
 [{
@@ -242,76 +242,28 @@
     <div class="form-panel" id="tab8">
         <form id="clear_learning_situation_data" onsubmit="event.preventDefault(); ClearLearningSituationData()">
             <div class="form-grid">
-                <label class="form-label"><span class="red">*</span>大用户ID：</label>
+                <label class="form-label"><span class="red">*</span>大用户ID</label>
                 <div class="form-control">
                     <input id="student_id" type="number" name="student_id" autocomplete="off" placeholder="请输入学员ID"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>节点类型：</label>
+                <label class="form-label"><span class="red">*</span>节点类型</label>
                 <div class="form-control">
                     <div class="custom-checkbox-group">
                         <label class="custom-checkbox">
-                            <input type="checkbox" name="node_id" value="1">
+                            <input type="checkbox" name="node_type" value="FIRST_LESSON">
                             <span>首课节点</span>
                         </label>
                         <label class="custom-checkbox">
-                            <input type="checkbox" name="node_id" value="2">
-                            <span>首节节点</span>
+                            <input type="checkbox" name="node_type" value="FIRST_SPECIAL">
+                            <span>首专节点</span>
                         </label>
                         <label class="custom-checkbox">
-                            <input type="checkbox" name="node_id" value="3">
+                            <input type="checkbox" name="node_type" value="FIRST_MONTH">
                             <span>首月节点</span>
                         </label>
                     </div>
                 </div>
-                <style>
-                    .custom-checkbox-group {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 15px;
-                    }
-                    .custom-checkbox {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                    }
-                    .custom-checkbox input[type="checkbox"] {
-                        position: absolute;
-                        opacity: 0;
-                        cursor: pointer;
-                    }
-                    .custom-checkbox span {
-                        position: relative;
-                        padding-left: 25px;
-                        font-size: 14px;
-                    }
-                    .custom-checkbox span:before {
-                        content: "";
-                        position: absolute;
-                        left: 0;
-                        top: 2px;
-                        width: 16px;
-                        height: 16px;
-                        border: 1px solid #dcdfe6;
-                        border-radius: 4px;
-                        background-color: white;
-                    }
-                    .custom-checkbox input[type="checkbox"]:checked + span:before {
-                        background-color: #50C8B9;
-                        border-color: #50C8B9;
-                    }
-                    .custom-checkbox input[type="checkbox"]:checked + span:after {
-                        content: "";
-                        position: absolute;
-                        left: 5px;
-                        top: 2px;
-                        width: 6px;
-                        height: 10px;
-                        border: solid white;
-                        border-width: 0 2px 2px 0;
-                        transform: rotate(45deg);
-                    }
-                </style>
                 <label class="form-label"></label>
                 <div class="form-control">
                     <button type="submit" class="el-button">确认清理数据</button>
