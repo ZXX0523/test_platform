@@ -120,12 +120,16 @@ function DeleteConversation(){
         let user_wechatname=document.getElementById("user_wechatname").value;
         let subject_id = document.getElementById('courseType').value;
         let clear_wechat_data = document.getElementById('clear_wechat_data').value;
+        var envbox=document.getElementById("choose_env");
+        radios=envbox.getElementsByTagName("input");
+        for(i=0;i<radios.length;i++){
+            if(radios[i].checked===true){
+                 var choose_env = radios[i].value;
+                 console.log(choose_env);
+                }
+            }
         var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
-        var url = '/dm_gubi/py/delete_conversation'+
-                "?seat_wechatid="+seat_wechatid+
-                "&user_wechatname="+user_wechatname+
-                "&subject_id="+subject_id+
-                "&clear_wechat_data="+clear_wechat_data;
+        var url = '/dm_gubi/py/delete_conversation'+"?env="+choose_env+"&seat_wechatid="+seat_wechatid+"&user_wechatname="+user_wechatname+"&subject_id="+subject_id+"&clear_wechat_data="+clear_wechat_data;
         httpRequest.open('GET', url, true);//第二步：打开连接
         httpRequest.setRequestHeader("Content-type", "application/json; charset=utf-8");
         httpRequest.send();//第三步：发送请求  将请求参数写在URL中

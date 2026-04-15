@@ -60,11 +60,14 @@ class Dm_Script():
             return True, "修改成功", str
 
 
-    def select_dm_wechat_data_for_name(self, name,business_id):
+    def select_dm_wechat_data_for_name(self, env, name,business_id):
         sql1 = """SELECT * FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE `nick_name` = '{}' and business_id = {} limit 1""".format(
             name,business_id)
         print(sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         sql_result = mysql_conn.fetchall(sql1)
         print(sql_result)
         if len(sql_result)== 0:
@@ -87,12 +90,15 @@ class Dm_Script():
         return data
 
 
-    def select_dm_wechat_data(self, wechat_id):
+    def select_dm_wechat_data(self, env, wechat_id):
         sql1 = """SELECT * FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE `wechat_id` = '{}'""".format(
             wechat_id)
 
         print(sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         sql_result1 = mysql_conn.fetchall(sql1)
         print(sql_result1)
         if len(sql_result1)== 0:
@@ -111,12 +117,15 @@ class Dm_Script():
         return data
 
 
-    def select_dm_wechat_data2(self, id):
+    def select_dm_wechat_data2(self, env, id):
         sql1 = """SELECT * FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE `id` = '{}'""".format(
             id)
         # sql_result1 = database("mysql_hualala_test", "i61-bizcenter-copilot").database_manipulation(operate_sql_type=1,
         #                                                                                             sql=sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         sql_result1 = mysql_conn.fetchall(sql1)
         if len(sql_result1)== 0:
             print("没有查询到数据")
@@ -133,13 +142,15 @@ class Dm_Script():
         return data
 
 
-
-    def delete_dm_wechat_data(self, wechat_id):
+    def delete_dm_wechat_data(self, env, wechat_id):
 
         sql1 = """DELETE FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE `wechat_id` = '{}';""".format(
             wechat_id)
         print(sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         mysql_conn.execute(sql1)
         sql2 = """DELETE FROM `i61-bizcenter-copilot`.`dm_wechat_user_intent` WHERE `wechat_id` = '{}';""".format(
             wechat_id)
@@ -148,21 +159,27 @@ class Dm_Script():
 
 
 
-    def delete_cw_biz_external_user_relation_data(self,wechat_id):
+    def delete_cw_biz_external_user_relation_data(self, env, wechat_id):
 
         sql1 = """DELETE FROM `i61-bizcenter-corpwechat`.`cw_biz_external_user_relation` WHERE external_user_id = '{}';""".format(
             wechat_id)
         # sql_result1 = database("mysql_hualala_test", "i61-bizcenter-copilot").database_manipulation(operate_sql_type=2,
         #                                                                                             sql=sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         mysql_conn.execute(sql1)
 
-    def select_cw_biz_external_user_relation_data(self,wechat_id):
+    def select_cw_biz_external_user_relation_data(self, env, wechat_id):
         sql1 = """SELECT * FROM `i61-bizcenter-corpwechat`.`cw_biz_external_user_relation` WHERE `external_user_id` = '{}'""".format(
             wechat_id)
         # sql_result1 = database("mysql_hualala_test", "i61-bizcenter-copilot").database_manipulation(operate_sql_type=1,
         #                                                                                             sql=sql1)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         sql_result1 = mysql_conn.fetchall(sql1)
         if len(sql_result1)== 0:
             print("没有查询到数据")
@@ -175,49 +192,55 @@ class Dm_Script():
         return data
 
 
-    def delete_cw_chat_data_data(self,external_user):
+    def delete_cw_chat_data_data(self, env, external_user):
         sql = "DELETE FROM `i61-bizcenter-corpwechat`.cw_chat_data WHERE external_user = '{}' and msg_time > 1720348933341".format(external_user)
         print(sql)
         # delete_cw_chat_data_result = database("mysql_hualala_test" ,"i61-bizcenter-corpwechat").database_manipulation(operate_sql_type=2, sql=sql)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         mysql_conn.execute(sql)
 
-    def delete_cw_biz_external_user_relation_history_data(self,user_id,external_user):
+    def delete_cw_biz_external_user_relation_history_data(self, env, user_id,external_user):
         sql = "DELETE FROM `i61-bizcenter-corpwechat`.cw_biz_external_user_relation_history WHERE user_id = '{}' and external_user_id = '{}' ".format(user_id,external_user)
         print(sql)
         # delete_cw_chat_data_result = database("mysql_hualala_" + self.data_env_switch,"i61-bizcenter-corpwechat").database_manipulation(operate_sql_type=2, sql=sql)
-        mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        if env=='test':
+            mysql_conn = mysqlMain('MySQL-Liuyi-test')
+        else:
+            mysql_conn = mysqlMain('MySQL-Liuyi-preprod')
         mysql_conn.execute(sql)
 
-    def dm_wechat_script_all(self,user_id,name,business_id,clear_wechat_data):
+    def dm_wechat_script_all(self, env, user_id,name,business_id,clear_wechat_data):
         print("开始执行清理数据")
-        print("打印环境choose_env：", user_id, name, business_id,clear_wechat_data)
+        print("打印环境choose_env：", env, user_id, name, business_id,clear_wechat_data)
         business_id_int=int(business_id)
 
         clear_wechat_data_int=int(clear_wechat_data)
         try:
             print("17123123")
-            select_data = self.select_dm_wechat_data_for_name(name, business_id)
+            select_data = self.select_dm_wechat_data_for_name(env, name, business_id)
             if select_data == None:
                 print("没有数据")
                 return False, "查询不到该会话数据"
             wechat_id = select_data["wechat_id"]
 
             print("开始处理删除学员会话相关表")
-            self.delete_dm_wechat_data(wechat_id)
+            self.delete_dm_wechat_data(env, wechat_id)
 
             if clear_wechat_data_int ==1:
                 print("开始处理cw_chat_data相关表")
-                self.delete_cw_chat_data_data(wechat_id)
+                self.delete_cw_chat_data_data(env, wechat_id)
 
                 print("开始处理cw_biz_external_user_relation_history相关表")
-                self.delete_cw_biz_external_user_relation_history_data(user_id,wechat_id)
+                self.delete_cw_biz_external_user_relation_history_data(env, user_id,wechat_id)
 
-                phone_number_data = self.select_cw_biz_external_user_relation_data(wechat_id)
+                phone_number_data = self.select_cw_biz_external_user_relation_data(env, wechat_id)
                 print(phone_number_data)
 
                 print("开始删除cw_biz_external_user_relation")
-                self.delete_cw_biz_external_user_relation_data(wechat_id)
+                self.delete_cw_biz_external_user_relation_data(env, wechat_id)
 
             print("数据处理成功")
             return True, "处理成功"
@@ -561,6 +584,44 @@ class Dm_Script():
             return False, f"操作失败: {str(e)}"
         finally:
             del mysql_conn
+            
+    def insert_dm_edu_com_lrn_user_live_f(self, user_id, user_unification_id, rank_asc):
+        """
+        向dm_edu_com_lrn_user_live_f表插入数据
+        :param user_id: 用户ID
+        :param user_unification_id: 用户统一ID
+        :param rank_asc: 排名
+        :return: (成功状态, 消息)
+        """
+        try:
+            # 连接wd_dw数据库
+            mysql_conn = mysqlMain('MySQL-wd-dw')
+            
+            # 生成唯一的live_id（使用当前时间戳）
+            import time
+            live_id = int(time.time() * 1000000)
+            
+            # 构造插入SQL
+            sql = """
+            INSERT INTO dm_edu_com_lrn_user_live_f (
+                user_id, user_unification_id, rank_asc, live_id,
+                start_datetime, etl_time
+            ) VALUES (%s, %s, %s, %s, NOW(), NOW())
+            """
+            
+            # 执行插入
+            params = (user_id, user_unification_id, rank_asc, live_id)
+            row_count = mysql_conn.execute(sql, params)
+            
+            print(f"成功插入{row_count}条数据到dm_edu_com_lrn_user_live_f表")
+            print(f"插入数据: user_id={user_id}, user_unification_id={user_unification_id}, rank_asc={rank_asc}, live_id={live_id}")
+            
+            del mysql_conn
+            return True, f"成功插入数据，live_id: {live_id}"
+            
+        except Exception as e:
+            print(f"插入数据失败: {str(e)}")
+            return False, f"插入失败: {str(e)}"
                     
 if __name__ == '__main__':
     print("执行开始。。。。")

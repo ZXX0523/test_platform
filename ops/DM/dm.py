@@ -42,13 +42,14 @@ def update_user_openclasstime():
     return json.dumps(res, ensure_ascii=False)
 @dm_gubi.route('/py/delete_conversation')
 def delete_conversation():
+    env = flask.request.values.get('env')
     seat_wechatid = flask.request.values.get('seat_wechatid')
     user_wechatname = flask.request.values.get('user_wechatname')
     subject_id = flask.request.values.get('subject_id')
     clear_wechat_data = flask.request.values.get('clear_wechat_data')
     # 输入校验
     try:
-        res = Dm_Script().dm_wechat_script_all(seat_wechatid, user_wechatname, subject_id, clear_wechat_data)
+        res = Dm_Script().dm_wechat_script_all(env, seat_wechatid, user_wechatname, subject_id, clear_wechat_data)
         # print("123123123")
         print(res)
     except KeyError as e:
