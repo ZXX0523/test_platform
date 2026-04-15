@@ -81,8 +81,9 @@ def update_course_finished_status():
     env = flask.request.values.get('env')
     user_id = flask.request.values.get('user_id')
     finished = flask.request.values.get('finished')
+    finished_2 = flask.request.values.get('finished_2')
     try:
-        res = Dm_Script().update_course_finished_status(env, user_id,finished)
+        res = Dm_Script().update_course_finished_status(env, user_id,finished,finished_2)
         print(res)
     except KeyError as e:
         # 异常时，执行该块

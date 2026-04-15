@@ -10,7 +10,7 @@
 <body>
     <!-- 页面标题 -->
     <div class="page-header">
-        <h1 class="page-title">DM系统操作中心</h1>
+        <h1 class="page-title">北冥系统操作中心</h1>
         <!-- <h1 style="color: #08A993;margin-left: 20px;">DM系统相关操作</h1> -->
         <!-- <p class="page-desc">高效管理学员数据与系统会话</p> -->
     </div>
@@ -80,9 +80,16 @@
                     <input id="gubi_id" name="gubi_id" autocomplete="off" placeholder="请输入咕比学员id" type="number"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>是否完课</label>
+                <label class="form-label"><span class="red">*</span>第一节课是否完课</label>
                 <div class="form-control">
                     <select id="finished_status" class="custom-select">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+                 <label class="form-label"><span class="red">*</span>第二节课是否完课</label>
+                <div class="form-control">
+                    <select id="finished_status_2" class="custom-select">
                         <option value="1">是</option>
                         <option value="0">否</option>
                     </select>

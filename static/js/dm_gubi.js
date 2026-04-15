@@ -86,6 +86,8 @@ function FinishedStatus(){
         document.getElementById("result").innerText = "修改中...";
         let user_id=document.getElementById("gubi_id").value;
         let finished_status = document.getElementById('finished_status').value;
+        let finished_status2 = document.getElementById('finished_status_2').value;
+        console.log(finished_status2);
         var envbox=document.getElementById("choose_env");
         radios=envbox.getElementsByTagName("input");
         for(i=0;i<radios.length;i++){
@@ -98,7 +100,8 @@ function FinishedStatus(){
         var url = '/dm_gubi/py/update_course_finished_status'+
                 "?env="+choose_env+
                 "&user_id="+user_id+
-                "&finished="+finished_status;
+                "&finished="+finished_status+
+                "&finished_2="+finished_status2;
         httpRequest.open('GET', url, true);//第二步：打开连接
         httpRequest.setRequestHeader("Content-type", "application/json; charset=utf-8");
         httpRequest.send();//第三步：发送请求  将请求参数写在URL中

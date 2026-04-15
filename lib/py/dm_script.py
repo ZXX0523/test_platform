@@ -283,7 +283,7 @@ class Dm_Script():
             #     cursor.close()
             # if conn:
             #     conn.close()
-    def update_course_finished_status(self,choose_url,user_id,finished):
+    def update_course_finished_status(self,choose_url,user_id,finished,finished_2=None):
         try:
             if choose_url == "test":
                 mysql_conn = mysqlMain('MySQL-Gubi-test')
@@ -314,6 +314,14 @@ class Dm_Script():
                 else:
                     sql="UPDATE pjx.user_course SET course_status=0,comment_time=NULL WHERE id='{}';".format(course_id)
                 mysql_conn.execute(sql)
+                # 增加判断：如果有第二条数据且提供了finished_2参数，则更新第二条数据
+                if len(sql_result1) > 1 and finished_2 is not None:
+                    course_id_2 = sql_result1[1]["id"]
+                    if int(finished_2) == 1:
+                        sql_2 = "UPDATE pjx.user_course SET course_status=15,comment_time='{}' WHERE id='{}';".format(now_time, course_id_2)
+                    else:
+                        sql_2 = "UPDATE pjx.user_course SET course_status=0,comment_time=NULL WHERE id='{}';".format(course_id_2)
+                    mysql_conn.execute(sql_2)
                 return True,"更新成功"
         except Exception as e:
             data=f"插入失败: {str(e)}"
