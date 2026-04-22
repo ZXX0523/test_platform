@@ -44,6 +44,7 @@
         <div class="tab-item" data-tab="tab6">删除会话数据</div>
         <div class="tab-item" data-tab="tab7">插入企微聊天数据</div>
         <div class="tab-item" data-tab="tab8">清理学情数据&任务</div>
+        <div class="tab-item" data-tab="tab9">插入/清理学情数据</div>
     </div>
 
     <!-- 表单1：更新学员开课日（样式统一） -->
@@ -219,6 +220,7 @@
                         <option value="AI">围棋</option>
                         <option value="XDT">小灯塔</option>
                         <option value="WANDOU">豌豆</option>
+                        <option value="WANDOU_PPY">派培优</option>
                     </select>
                 </div>
                 <label class="form-label"><span class="red">*</span>聊天数据<span class="tooltip"><span class="tooltip-text">数据是插入企微会话存档表(cw_chat_data)</span></span></label>
@@ -275,6 +277,252 @@
                 <label class="form-label"></label>
                 <div class="form-control">
                     <button type="submit" class="el-button">确认清理数据</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 表单9：插入直播课数据 -->
+    <div class="form-panel" id="tab9">
+        <form id="insert_dm_edu_com_lrn_user_live_f" onsubmit="event.preventDefault(); InsertDmEduComLrnUserLiveF()">
+            <!-- 必填字段区域 -->
+            <div class="form-section">
+                <!-- <div class="form-section-title">基本信息</div> -->
+                <div class="form-grid">
+                    <label class="form-label">操作类型<span class="tooltip"><span class="tooltip-text">数仓表(wd_dw.dm_edu_com_lrn_user_live_f)</span></span></label>
+                    <div class="form-control">
+                        <select id="live_is_delete" class="custom-select" onchange="toggleUpdateMode()">
+                            <option value="">插入数据</option>
+                            <option value="update">更新数据</option>
+                            <option value="1">删除数据</option>
+                        </select>
+                    </div>
+                    <label class="form-label"><span class="red">*</span>豌豆ID</label>
+                    <div class="form-control">
+                        <input id="live_user_id" type="text" name="user_id" autocomplete="off" placeholder="请输入豌豆ID"
+                               class="el-input__inner" required/>
+                    </div>
+                    <label class="form-label"><span class="red">*</span>大用户ID</label>
+                    <div class="form-control">
+                        <input id="live_user_unification_id" type="text" name="user_unification_id" autocomplete="off" placeholder="请输入大用户ID"
+                               class="el-input__inner" required/>
+                    </div>
+                    <label class="form-label"><span class="red">*</span>课节顺序</label>
+                    <div class="form-control">
+                        <input id="live_rank_asc" type="text" name="rank_asc" autocomplete="off" placeholder="支持多个，英文逗号分隔，如: 1,2,3"
+                               class="el-input__inner" required/>
+                    </div>
+                    <label class="form-label">用户名称</label>
+                    <div class="form-control">
+                        <input id="live_user_name" type="text" name="user_name" autocomplete="off" placeholder="不填则随机生成"
+                               class="el-input__inner"/>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 可选字段折叠区域 -->
+            <div class="collapse-section">
+                <div class="collapse-header" onclick="toggleCollapse('optional-fields')">
+                    <span>📋 更多可选字段（点击展开）</span>
+                    <span class="collapse-icon" id="optional-fields-icon">▼</span>
+                </div>
+                <div class="collapse-content" id="optional-fields" style="display: none;">
+                    <!-- 课程信息 -->
+                    <div class="form-section">
+                        <div class="form-section-title">课程信息</div>
+                        <div class="form-grid">
+                            <label class="form-label">品牌代码</label>
+                            <div class="form-control">
+                                <input id="live_brand_code" type="text" name="brand_code" autocomplete="off" placeholder="默认: VIP_WanDou"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">LP ID</label>
+                            <div class="form-control">
+                                <input id="live_lp_id" type="text" name="lp_id" autocomplete="off" placeholder="默认: 667508"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">LP名称</label>
+                            <div class="form-control">
+                                <input id="live_lp_name" type="text" name="lp_name" autocomplete="off" placeholder="不填则随机"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">教师ID</label>
+                            <div class="form-control">
+                                <input id="live_teacher_id" type="text" name="teacher_id" autocomplete="off" placeholder="默认: 11698"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">教师名称</label>
+                            <div class="form-control">
+                                <input id="live_teacher_name" type="text" name="teacher_name" autocomplete="off" placeholder="不填则随机"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">阶段SID</label>
+                            <div class="form-control">
+                                <input id="live_cate_sid" type="text" name="cate_sid" autocomplete="off" placeholder="随机 1000-9999"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">阶段名称</label>
+                            <div class="form-control">
+                                <select id="live_cate_stage" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="S1">S1</option>
+                                    <option value="S2">S2</option>
+                                    <option value="S3">S3</option>
+                                    <option value="S4">S4</option>
+                                    <option value="S5">S5</option>
+                                    <option value="S6">S6</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 上课表现 -->
+                    <div class="form-section">
+                        <div class="form-section-title">上课表现</div>
+                        <div class="form-grid">
+                            <label class="form-label">是否出席</label>
+                            <div class="form-control">
+                                <select id="live_is_attend" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">是否迟到</label>
+                            <div class="form-control">
+                                <select id="live_is_late" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">是否课前预习</label>
+                            <div class="form-control">
+                                <select id="live_is_prepare" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">是否离线</label>
+                            <div class="form-control">
+                                <select id="live_is_exit" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">正脸帧数比例</label>
+                            <div class="form-control">
+                                <input id="live_frontal_face_rate" type="text" name="frontal_face_rate" autocomplete="off" placeholder="随机 0.5-1.0"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">微笑表情占比</label>
+                            <div class="form-control">
+                                <input id="live_smile_rate" type="text" name="smile_rate" autocomplete="off" placeholder="随机 0-0.5"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">完课率</label>
+                            <div class="form-control">
+                                <input id="live_completion_rate" type="text" name="completion_rate" autocomplete="off" placeholder="随机 0.8-1.2"
+                                       class="el-input__inner"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作业相关 -->
+                    <div class="form-section">
+                        <div class="form-section-title">作业相关</div>
+                        <div class="form-grid">
+                            <label class="form-label">是否提交作业</label>
+                            <div class="form-control">
+                                <select id="live_is_homework_submit" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">是否作业订正</label>
+                            <div class="form-control">
+                                <select id="live_is_homework_correct" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">是否秒答作业</label>
+                            <div class="form-control">
+                                <select id="live_is_quick_answer" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                            <label class="form-label">秒答作业数量</label>
+                            <div class="form-control">
+                                <input id="live_quick_answer_cnt" type="number" name="quick_answer_cnt" autocomplete="off" placeholder="随机 0-10"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">课后作业正确率</label>
+                            <div class="form-control">
+                                <input id="live_homework_true_rate" type="text" name="homework_true_rate" autocomplete="off" placeholder="随机 0.5-1.0"
+                                       class="el-input__inner"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 答题数据 -->
+                    <div class="form-section">
+                        <div class="form-section-title">答题数据</div>
+                        <div class="form-grid">
+                            <label class="form-label">题目解锁数</label>
+                            <div class="form-control">
+                                <input id="live_question_unlock_cnt" type="number" name="question_unlock_cnt" autocomplete="off" placeholder="随机 3-10"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">课中首答正确率</label>
+                            <div class="form-control">
+                                <input id="live_first_answer_true_rate" type="text" name="first_answer_true_rate" autocomplete="off" placeholder="随机 0.3-1.0"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">课程评价</label>
+                            <div class="form-control">
+                                <select id="live_course_evaluate_score" class="custom-select">
+                                    <option value="">随机</option>
+                                    <option value="1">⭐ 1星</option>
+                                    <option value="2">⭐⭐ 2星</option>
+                                    <option value="3">⭐⭐⭐ 3星</option>
+                                    <option value="4">⭐⭐⭐⭐ 4星</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ 5星</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 其他信息 -->
+                    <div class="form-section">
+                        <div class="form-section-title">其他信息</div>
+                        <div class="form-grid">
+                            <label class="form-label">ASR内容</label>
+                            <div class="form-control">
+                                <input id="live_asr_content" type="text" name="asr_content" autocomplete="off" placeholder="不填则随机生成"
+                                       class="el-input__inner"/>
+                            </div>
+                            <label class="form-label">知识点</label>
+                            <div class="form-control">
+                                <input id="live_knowledge_point" type="text" name="knowledge_point" autocomplete="off" placeholder="不填则随机"
+                                       class="el-input__inner"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <label class="form-label"></label>
+                <div class="form-control">
+                    <button type="submit" class="el-button" id="insert-live-data-btn">确认提交</button>
+                    <!-- <button type="submit" class="el-button el-button-primary" id="insert-live-data-btn">✓ 确认提交</button> -->
                 </div>
             </div>
         </form>

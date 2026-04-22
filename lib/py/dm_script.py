@@ -1,3 +1,8 @@
+"""
+DM工具箱 - 数据库操作脚本
+提供用户、课程、学情、直播课等数据的增删改查功能
+"""
+
 import uuid
 from datetime import datetime, timedelta, timezone
 import re
@@ -9,29 +14,27 @@ import redis
 import sys
 import os
 
+# 添加项目根目录到系统路径，解决模块导入问题
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
 from bin.runMySQL import mysqlMain
 
 
 class Dm_Script():
-    # 数据库连接配置映射
+    """
+    DM工具箱主类
+    封装各类数据库操作方法，支持测试/预发环境切换
+    """
+
+    # ==================== 配置信息 ====================
+
+    # 数据库连接配置：按环境(test/pre)和业务类型(liuyi/gubi/ob)分类
     DB_CONFIG = {
-        'liuyi': {
-            'test': 'MySQL-Liuyi-test',
-            'pre': 'MySQL-Liuyi-preprod'
-        },
-        'gubi': {
-            'test': 'MySQL-Gubi-test',
-            'pre': 'MySQL-Gubi-preprod'
-        },
-        'ob': {
-            'test': 'MySQL-ob-test',
-            'pre': 'MySQL-ob-preprod'
-        }
+        'liuyi': {'test': 'MySQL-Liuyi-test', 'pre': 'MySQL-Liuyi-preprod'},
+        'gubi': {'test': 'MySQL-Gubi-test', 'pre': 'MySQL-Gubi-preprod'},
+        'ob': {'test': 'MySQL-ob-test', 'pre': 'MySQL-ob-preprod'}
     }
-    
-    # URL配置映射
+
+    # 接口URL配置：demo课相关接口
     URL_CONFIG = {
         'test': {
             'demo_lesson': 'https://sht-cc.vipthink.cn/gateway/route__cc/api_admin.php/core/route__php_project_common/mvp/user_demo_lesson',
@@ -43,6 +46,8 @@ class Dm_Script():
         }
     }
 
+    # ==================== 私有方法 ====================
+
     def _get_mysql_conn(self, env, db_type='liuyi'):
         """获取数据库连接"""
         env_key = 'test' if env == 'test' else 'pre'
@@ -50,13 +55,14 @@ class Dm_Script():
         return mysqlMain(db_name)
 
     def _get_url(self, env, url_type):
-        """获取URL"""
+        """获取接口URL"""
         env_key = 'test' if env == 'test' else 'pre'
         return self.URL_CONFIG.get(env_key, {}).get(url_type, '')
 
     def _delete_redis_key(self, choose_url, key_pattern):
-        """通用方法：删除Redis键"""
+        """删除Redis缓存键，用于数据更新后清除缓存"""
         try:
+            # 根据环境选择Redis主机
             redis_host = 'redis-test.61info.cn' if choose_url == "test" else 'preprod1.61draw.com'
             redis_client = redis.Redis(host=redis_host, port=6379, db=7)
             if redis_client.exists(key_pattern):
@@ -68,26 +74,8 @@ class Dm_Script():
         except Exception as redis_e:
             print(f"删除Redis缓存失败: {str(redis_e)}")
 
-    def UpdateUserOpenclasstime(self, choose_url, external_user, open_class_time):
-        mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
-        sql = "select esu.enrollment_id from experience_sign_up esu inner join enrollment e on esu.enrollment_id = e.id where user_id='{}' and esu.course_category_id=4 order by esu.id desc limit 1".format(external_user)
-        sql_result = mysql_conn.fetchone(sql)
-        print(sql_result)
-        if sql_result is None:
-            return False, "修改失败，查询不到该学员的批次信息"
-        
-        enrollment_id = sql_result['enrollment_id']
-        sql1 = "UPDATE enrollment SET open_course_time = '{}' WHERE id = '{}';".format(open_class_time, enrollment_id)
-        try:
-            mysql_conn.execute(sql1)
-            redis_key = f"i61-eos-copilot:cache:pjx:getUserOpenCourseTimeList{external_user}_1"
-            self._delete_redis_key(choose_url, redis_key)
-        except Exception as e:
-            return False, "执行异常"
-        return True, "修改成功", f"开课日更新为：{open_class_time}"
-
     def _select_dm_wechat_data(self, env, where_clause):
-        """通用方法：查询dm_wechat_conversation表"""
+        """查询微信会话数据（通用查询方法）"""
         sql = f"""SELECT * FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE {where_clause}"""
         print(sql)
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
@@ -98,22 +86,94 @@ class Dm_Script():
             print("没有查询到数据")
             return None
         
+        # 返回关键信息：会话ID、对话ID、微信ID
         return {
             "dm_wechat_conversation_id": sql_result[0]["id"],
             "conversation_id": sql_result[0]["dify_conversation_id"],
             "wechat_id": sql_result[0]["wechat_id"]
         }
 
+    def _fetch_st_ids(self, choose_url, user_id):
+        """获取用户demo课的st_id列表（用于取消demo课）"""
+        url = self._get_url(choose_url, 'demo_lesson')
+        headers = {'Content-Type': 'application/json'}
+        payload = {"user_id": str(user_id)}
+
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            response.raise_for_status()
+            result = response.json()
+            print(result)
+            if result.get('code') == 0 and 'data' in result:
+                # 提取所有st_id
+                return [item['st_id'] for item in result['data'] if 'st_id' in item]
+            else:
+                print(f"获取st_id失败: {result.get('info', 'Unknown error')}")
+                return []
+        except Exception as e:
+            print(f"获取st_id时发生错误: {str(e)}")
+            return []
+
+    def _cancel_demo_lesson(self, choose_url, user_id, st_id):
+        """取消单个demo课"""
+        url = self._get_url(choose_url, 'cancel_demo')
+        headers = {'Content-Type': 'application/json'}
+        payload = {"user_id": str(user_id), "st_id": st_id}
+        print(payload)
+
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            response.raise_for_status()
+            result = response.json()
+
+            if result.get('code') == 0:
+                print(f"成功取消st_id: {st_id}")
+                return True
+            else:
+                print(f"取消st_id {st_id} 失败: {result.get('info', 'Unknown error')}")
+                return False
+        except Exception as e:
+            print(f"取消st_id {st_id} 时发生错误: {str(e)}")
+            return False
+
+    # ==================== 用户相关操作 ====================
+
+    def UpdateUserOpenclasstime(self, choose_url, external_user, open_class_time):
+        """更新用户开课时间"""
+        mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
+        # 查询用户最近的体验课批次
+        sql = "select esu.enrollment_id from experience_sign_up esu inner join enrollment e on esu.enrollment_id = e.id where user_id='{}' and esu.course_category_id=4 order by esu.id desc limit 1".format(external_user)
+        sql_result = mysql_conn.fetchone(sql)
+        print(sql_result)
+        if sql_result is None:
+            return False, "修改失败，查询不到该学员的批次信息"
+        
+        enrollment_id = sql_result['enrollment_id']
+        # 更新开课时间
+        sql1 = "UPDATE enrollment SET open_course_time = '{}' WHERE id = '{}';".format(open_class_time, enrollment_id)
+        try:
+            mysql_conn.execute(sql1)
+            # 清除Redis缓存
+            redis_key = f"i61-eos-copilot:cache:pjx:getUserOpenCourseTimeList{external_user}_1"
+            self._delete_redis_key(choose_url, redis_key)
+        except Exception as e:
+            return False, "执行异常"
+        return True, "修改成功", f"开课日更新为：{open_class_time}"
+
     def select_dm_wechat_data_for_name(self, env, name, business_id):
+        """根据名称查询微信数据"""
         return self._select_dm_wechat_data(env, f"`nick_name` = '{name}' and business_id = {business_id} limit 1")
 
     def select_dm_wechat_data(self, env, wechat_id):
+        """根据wechat_id查询微信数据"""
         return self._select_dm_wechat_data(env, f"`wechat_id` = '{wechat_id}'")
 
     def select_dm_wechat_data2(self, env, id):
+        """根据id查询微信数据"""
         return self._select_dm_wechat_data(env, f"`id` = '{id}'")
 
     def delete_dm_wechat_data(self, env, wechat_id):
+        """删除微信会话数据（同时删除会话表和意图表）"""
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
         sql1 = f"""DELETE FROM `i61-bizcenter-copilot`.`dm_wechat_conversation` WHERE `wechat_id` = '{wechat_id}';"""
         print(sql1)
@@ -123,12 +183,14 @@ class Dm_Script():
         mysql_conn.execute(sql2)
 
     def delete_cw_biz_external_user_relation_data(self, env, wechat_id):
+        """删除企微外部用户关系数据"""
         sql1 = f"""DELETE FROM `i61-bizcenter-corpwechat`.`cw_biz_external_user_relation` WHERE external_user_id = '{wechat_id}';"""
         print(sql1)
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
         mysql_conn.execute(sql1)
 
     def select_cw_biz_external_user_relation_data(self, env, wechat_id):
+        """查询企微外部用户关系数据"""
         sql1 = f"""SELECT * FROM `i61-bizcenter-corpwechat`.`cw_biz_external_user_relation` WHERE `external_user_id` = '{wechat_id}'"""
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
         sql_result1 = mysql_conn.fetchall(sql1)
@@ -138,22 +200,26 @@ class Dm_Script():
         return {"bind_mobile": sql_result1[0]["bind_mobile"]}
 
     def delete_cw_chat_data_data(self, env, external_user):
+        """删除企微聊天数据"""
         sql = f"DELETE FROM `i61-bizcenter-corpwechat`.cw_chat_data WHERE external_user = '{external_user}' and msg_time > 1720348933341"
         print(sql)
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
         mysql_conn.execute(sql)
 
     def delete_cw_biz_external_user_relation_history_data(self, env, user_id, external_user):
+        """删除企微外部用户关系历史数据"""
         sql = f"DELETE FROM `i61-bizcenter-corpwechat`.cw_biz_external_user_relation_history WHERE user_id = '{user_id}' and external_user_id = '{external_user}'"
         print(sql)
         mysql_conn = self._get_mysql_conn(env, 'liuyi')
         mysql_conn.execute(sql)
 
     def dm_wechat_script_all(self, env, user_id, name, business_id, clear_wechat_data):
+        """清理微信会话相关数据（批量操作，可选择性清理聊天记录）"""
         print("开始执行清理数据")
         print("打印环境choose_env：", env, user_id, name, business_id, clear_wechat_data)
         
         try:
+            # 查询会话数据
             select_data = self.select_dm_wechat_data_for_name(env, name, business_id)
             if select_data is None:
                 print("没有数据")
@@ -163,6 +229,7 @@ class Dm_Script():
             print("开始处理删除学员会话相关表")
             self.delete_dm_wechat_data(env, wechat_id)
 
+            # 如果clear_wechat_data=1，则额外清理聊天记录和用户关系
             if int(clear_wechat_data) == 1:
                 print("开始处理cw_chat_data相关表")
                 self.delete_cw_chat_data_data(env, wechat_id)
@@ -184,6 +251,8 @@ class Dm_Script():
             return False, "执行异常"
 
     def insert_user_chat_data(self, env, user_id, external_user_id, data_str, brand_code):
+        """插入用户聊天数据（支持文本和图片消息）"""
+        # 清理JSON字符串中的特殊字符
         data_str = re.sub(r'[\x00-\x1F]|\x7F', '', data_str)
         data_str = re.sub(r'\\(?![/u"])', r'', data_str)
         cleaned_data = data_str.encode('utf-8', errors='ignore').decode('utf-8')
@@ -199,6 +268,7 @@ class Dm_Script():
                 content = item['content']
                 role = item['role']
                 
+                # 根据角色确定发送方和接收方
                 if role == 'user':
                     from_user, to_user = external_user_id, user_id
                 else:
@@ -206,10 +276,11 @@ class Dm_Script():
                     
                 print(seq, msg_id, from_user, to_user, to_user, current_timestamp, content)
                 
+                # 图片消息和文本消息使用不同的SQL
                 if '【图片】' in content:
-                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,file_sdk_id,file_size,file_md5,file_url,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'image','send', '{}' , '{}' ,'{}' ,NULL,'{}' ,'CtYBMzA2OTAyMDEwMjA0NjIzMDYwMDIwMTAwMDIwNDNhOWYwODEwMDIwMzBmNGRmYjAyMDQyNjQxZTg3ODAyMDQ2ODQyNjMyZDA0MjQzMzYyMzE2MTM0NjQzNDM1MmQzOTMyNjYzMTJkMzQzNjMyNjEyZDM4NjM2MjMwMmQzNTYyMzMzMzMxMzkzNzY2NjE2MzYzMzYwMjAxMDAwMjAzMDUzMWYwMDQxMDM4MTVlZGVmMjRmMmEyNWY2ZTE0YjU4Y2JiYjc0M2NkMDIwMTAyMDIwMTAwMDQwMBI4TkRkZk1UWTRPRGcxTlRFek9EY3pNakEwT0Y4eE5UVXpNams1T1RnM1h6RTNORGt4T0RFeU16TT0aIGE4ZTE4NWJmOGQ2NDQ3MGU5YTczOTQ5MWJmNjU5MmRm',340462,'3815edef24f2a25f6e14b58cbbb743cd3815edef24f2a25f6e14b58cbbb743cd','https://hualala-common.oss-cn-shenzhen.aliyuncs.com/test/corporate-wechat-backend/6842c73145c657000140e748.png',2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code, seq, msg_id, from_user, to_user, external_user_id, current_timestamp)
+                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,file_sdk_id,file_size,file_md5,file_url,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'image','send', '{}' , '{}' ,'{}' ,NULL,'{}' ,'CtYBMzA2OTAyMDEwMjA0NjIzMDYwMDIwMTAwMDIwNDNhOWYwODEwMDIwMzBmNGRmYjAyMDQyNjQxZTg3ODAyMDQ2ODQyNjMyZDA0MjQzMzYyMzE2MTM0NjQzNDM1MmQzOTMyNjYzMTJkMzQzNjMyNjEyZDM4NjM2MjMwMmQzNTYyMzMzMzMxMzkzNzY2NjE2MzYzMzYwMjAxMDAwMjAzMDUzMWYwMDQxMDM4MTVlZGVmMjRmMmEyNWY2ZTE0YjU4Y2JiYjc0M2NkMDIwMTAyMDIwMTAwMDQwMBI4TkRkZk1UWTRPRGcxTlRFek9EY3pNakEwT0Y4eE5UVXpNams1T1RnM1h6RTNORGt4T0RFeU16TT0aIGE4ZTE4NWJmOGQ2NDQ3MGU5YTczOTQ5MWJmNjU5MmRm',340462,'3815edef24f2a25f6e14b58cbbb743cd3815edef24f2a25f6e14b58cbbb743cd','https://hualala-common.oss-cn-shenzhen.aliyuncs.com/test/corporate-wechat-backend/6842c73145c657000140e748.png',2,NOW(),NOW())".format(brand_code, seq, msg_id, from_user, to_user, external_user_id, current_timestamp)
                 else:
-                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,content,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'text','send', '{}' , '{}' ,'{}' ,NULL,'{}' , '{}' ,2,'2025-08-13 10:34:08','2025-08-13 10:34:08')".format(brand_code, seq, msg_id, from_user, to_user, external_user_id, current_timestamp, content)
+                    sql = "INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data (biz_code,corpid,seq,msg_id,msg_type,`action`,from_user,to_user,external_user,room_id,msg_time,content,transfer_file_status,create_time,update_time) VALUES ('{}','ww0af8bc32673add13','{}','{}' ,'text','send', '{}' , '{}' ,'{}' ,NULL,'{}' , '{}' ,2,NOW(),NOW())".format(brand_code, seq, msg_id, from_user, to_user, external_user_id, current_timestamp, content)
 
                 sql_result1 = mysql_conn.execute(sql)
                 print(sql_result1)
@@ -222,9 +293,13 @@ class Dm_Script():
         except Exception as e:
             return False, f"插入失败: {str(e)}"
 
+    # ==================== 课程相关操作 ====================
+
     def update_course_finished_status(self, choose_url, user_id, finished, finished_2=None):
+        """更新课程完成状态（可将课程标记为已完成或未完成）"""
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
+            # 查询用户的体验课课程ID
             sql = """
                 select uc.id
                 from user_course_line ucl
@@ -245,13 +320,16 @@ class Dm_Script():
             now_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             print(finished)
             
+            # 内部函数：生成更新SQL
             def update_course(course_id, is_finished):
                 if is_finished:
                     return f"UPDATE pjx.user_course SET course_status=15,comment_time='{now_time}' WHERE id='{course_id}';"
                 return f"UPDATE pjx.user_course SET course_status=0,comment_time=NULL WHERE id='{course_id}';"
             
+            # 更新第一节课状态
             mysql_conn.execute(update_course(sql_result1[0]["id"], int(finished) == 1))
             
+            # 如果有第二节课且指定了状态，则更新第二节课
             if len(sql_result1) > 1 and finished_2 is not None:
                 mysql_conn.execute(update_course(sql_result1[1]["id"], int(finished_2) == 1))
                 
@@ -260,23 +338,30 @@ class Dm_Script():
             return False, f"插入失败: {str(e)}"
 
     def update_go_pk_record(self, choose_url, user_id, win, lose):
+        """更新围棋对弈记录（先删除旧记录，再插入新记录）"""
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
 
             if user_id is not None and win is not None and lose is not None:
+                # 先删除旧的对弈记录
                 mysql_conn.execute(f'DELETE FROM pjx_go.t_go_play_pk_record where user_id ={user_id}')
                 
+                # 胜利记录SQL（result=1表示胜利）
                 sql_win = "INSERT INTO pjx_go.t_go_play_pk_record VALUES(NULL, 2, {}, '2026-01-19 18:09:05', 1, '9路吃子', 1, 1, 'Ceslin', 46, 'test', 2, 2, 2, 0, 0, 1, 3, 5.5, 3, 0, 0, 1, NULL, 1, 1, 0, '白吃3子', 0, 3, 0, 0, 0.00, 0.00, 33, 16, '2025-12-04 14:56:11', '2026-01-19 18:09:05');".format(user_id)
+                # 失败记录SQL（result=2表示失败）
                 sql_lose = "INSERT INTO pjx_go.t_go_play_pk_record VALUES(NULL, 2, {}, '2026-01-19 18:09:05', 1, '9路吃子', 1, 1, 'Ceslin', 46, 'test', 2, 2, 2, 0, 0, 1, 3, 5.5, 3, 0, 0, 1, NULL, 2, 1, 0, '白吃3子', 0, 3, 0, 0, 0.00, 0.00, 33, 16, '2025-12-04 14:56:11', '2026-01-19 18:09:05');".format(user_id)
                 
+                # 批量插入胜利记录
                 for i in range(int(win)):
                     mysql_conn.execute(sql_win)
                     print(f"插入第：{i+1}条数据")
                     
+                # 批量插入失败记录
                 for i in range(int(lose)):
                     mysql_conn.execute(sql_lose)
                     print(f"插入第：{i+1}条数据")
                     
+                # 清除Redis缓存
                 redis_key = f"i61-eos-copilot:cache:pjx:getUserPlayChessData{user_id}"
                 self._delete_redis_key(choose_url, redis_key)
                 
@@ -287,12 +372,15 @@ class Dm_Script():
             return False, f"插入失败: {str(e)}"
 
     def delete_review_record(self, choose_url, user_id):
+        """删除复盘记录（包括提醒关系和关注标签）"""
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
 
             if user_id is not None:
+                # 删除提醒关系
                 mysql_conn.execute(f'DELETE FROM pjx.help_util_user_remind_relation WHERE user_id={user_id};')
 
+                # 查询并删除关注标签
                 mysql_conn = self._get_mysql_conn(choose_url, 'liuyi')
                 sql_select = """
                     SELECT c2.id,c1.user_id,c1.external_user_id FROM 
@@ -313,55 +401,12 @@ class Dm_Script():
                 return False, "请输入用户id"
         except Exception as e:
             return False, f"更新失败: {str(e)}"
-        
-    def _fetch_st_ids(self, choose_url, user_id):
-        """私有方法：获取用户demo课的st_id列表"""
-        url = self._get_url(choose_url, 'demo_lesson')
-        headers = {'Content-Type': 'application/json'}
-        payload = {"user_id": str(user_id)}
-
-        try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            response.raise_for_status()
-            result = response.json()
-            print(result)
-            if result.get('code') == 0 and 'data' in result:
-                return [item['st_id'] for item in result['data'] if 'st_id' in item]
-            else:
-                print(f"获取st_id失败: {result.get('info', 'Unknown error')}")
-                return []
-        except Exception as e:
-            print(f"获取st_id时发生错误: {str(e)}")
-            return []
-
-    def _cancel_demo_lesson(self, choose_url, user_id, st_id):
-        """私有方法：取消单个demo课"""
-        url = self._get_url(choose_url, 'cancel_demo')
-        headers = {'Content-Type': 'application/json'}
-        payload = {
-            "user_id": str(user_id),
-            "st_id": st_id
-        }
-        print(payload)
-
-        try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            response.raise_for_status()
-            result = response.json()
-
-            if result.get('code') == 0:
-                print(f"成功取消st_id: {st_id}")
-                return True
-            else:
-                print(f"取消st_id {st_id} 失败: {result.get('info', 'Unknown error')}")
-                return False
-        except Exception as e:
-            print(f"取消st_id {st_id} 时发生错误: {str(e)}")
-            return False
 
     def cancel_user_demo_lessons(self, choose_url, user_id):
+        """取消用户所有demo课（批量取消）"""
         print(f"\n开始处理用户 {user_id} 的demo课...")
 
+        # 获取所有demo课的st_id
         st_ids = self._fetch_st_ids(choose_url, user_id)
         print(st_ids)
         if not st_ids:
@@ -370,20 +415,27 @@ class Dm_Script():
 
         print(f"获取到 {len(st_ids)} 个st_id: {st_ids}")
 
+        # 逐个取消demo课
         results = []
         for st_id in st_ids:
             success = self._cancel_demo_lesson(choose_url, user_id, st_id)
             results.append(success)
 
         return True, "取消demo课成功"
-    
+
+    # ==================== 助力工具相关 ====================
+
     def delete_help_util_userinfo(self, choose_url, user_id):
+        """删除助力工具用户信息（包括扩展信息和关系表）"""
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
 
             if user_id is not None:
+                # 删除扩展信息
                 mysql_conn.execute(f'DELETE FROM pjx.user_enterprise_extend_info WHERE user_id={user_id};')
+                # 删除关系表数据
                 mysql_conn.execute(f'DELETE FROM pjx.user_enterprise_extend_info_relation WHERE user_id={user_id};')
+                # 清除Redis缓存
                 redis_key = f"i61-eos-copilot:cache:pjxCache:userExInfo:{user_id}"
                 self._delete_redis_key(choose_url, redis_key)
                 
@@ -392,15 +444,15 @@ class Dm_Script():
                 return False, "请输入用户id"
         except Exception as e:
             return False, f"更新失败: {str(e)}"
-      
+
+    # ==================== 学情数据相关 ====================
+
     def clear_learning_situation_data(self, choose_url, student_id, node_types):
-        """
-        根据student_id和node_types删除学习情况数据
-        同时如果intervention_task_id不为0，也删除对应的干预任务数据
-        """
+        """清理学习情况数据（软删除，标记为已删除）"""
         mysql_conn = self._get_mysql_conn(choose_url, 'ob')
         
         try:
+            # 解析节点类型（支持逗号分隔的多个类型）
             if isinstance(node_types, str):
                 node_type_list = node_types.split(',')
             else:
@@ -414,16 +466,19 @@ class Dm_Script():
                 if not node_type:
                     continue
                     
+                # 查询学习情况数据
                 query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_type = %s AND is_deleted = 0"
                 result = mysql_conn.fetchone(query, (student_id, node_type))
                 
                 if result:
                     intervention_task_id = result.get('intervention_task_id', 0)
                     
+                    # 软删除学习情况数据
                     update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_type = %s"
                     mysql_conn.execute(update_query, (student_id, node_type))
                     print(f"已标记学习情况数据为已删除，student_id: {student_id}, node_type: {node_type}")
                     
+                    # 如果有关联的干预任务，也进行软删除
                     if intervention_task_id != 0:
                         update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
                         mysql_conn.execute(update_intervention_query, (intervention_task_id,))
@@ -445,9 +500,11 @@ class Dm_Script():
             return False, f"操作失败: {str(e)}"
         finally:
             del mysql_conn
-            
+
+    # ==================== 直播课数据相关 ====================
+
     def insert_dm_edu_com_lrn_user_live_f(self, user_id, user_unification_id, rank_asc,
-                                          is_delete=None,
+                                          is_delete=None, is_update=None,
                                           user_name=None, brand_code=None, lp_id=None, lp_name=None,
                                           teacher_id=None, teacher_name=None, cate_sid=None, cate_stage=None,
                                           is_attend=None, is_late=None, is_prepare=None, frontal_face_rate=None,
@@ -457,43 +514,24 @@ class Dm_Script():
                                           first_answer_true_rate=None, homework_true_rate=None, is_exit=None,
                                           asr_content=None, knowledge_point=None):
         """
-        向dm_edu_com_lrn_user_live_f表插入或删除数据
+        向dm_edu_com_lrn_user_live_f表插入/更新/删除直播课数据
+        支持批量操作：多个rank_asc用逗号分隔
+        支持删除模式：is_delete=1时执行删除
+        支持更新模式：is_update=1时执行更新（只更新传入的非空字段）
         :param user_id: 用户ID
         :param user_unification_id: 用户统一ID
-        :param rank_asc: 排名（支持多个，用逗号分隔，如 "1,2,3"）
-        :param is_delete: 是否执行删除操作（可选，默认False，执行插入）
-        :param user_name: 用户名称（可选，默认随机生成）
-        :param brand_code: 品牌代码（可选，默认VIP_WanDou）
-        :param lp_id: LP ID（可选，默认随机生成）
-        :param lp_name: LP名称（可选，默认随机生成）
-        :param teacher_id: 教师ID（可选，默认随机生成）
-        :param teacher_name: 教师名称（可选，默认随机生成）
-        :param cate_sid: 分类SID（可选，默认随机生成）
-        :param cate_stage: 分类阶段（可选，默认随机生成）
-        :param is_attend: 是否出席<0否,1是>（可选，默认随机）
-        :param is_late: 是否迟到<0否,1是>（可选，默认随机）
-        :param is_prepare: 是否课前预习<0否,1是>（可选，默认随机）
-        :param frontal_face_rate: 正脸帧数比例（可选，默认随机）
-        :param is_homework_submit: 是否提交作业<0否,1是>（可选，默认随机）
-        :param is_homework_correct: 是否作业订正<0否,1是>（可选，默认随机）
-        :param is_quick_answer: 是否秒答作业<0否,1是>（可选，默认随机）
-        :param quick_answer_cnt: 秒答作业数量（可选，默认随机）
-        :param smile_rate: 微笑表情占比（可选，默认随机）
-        :param completion_rate: 完课率（可选，默认随机）
-        :param question_unlock_cnt: 题目解锁数（可选，默认随机）
-        :param course_evaluate_score: 课程评价<1-5星,空表示未评价>（可选，默认随机）
-        :param first_answer_true_rate: 课中首答正确率（可选，默认随机）
-        :param homework_true_rate: 课后作业正确率（可选，默认随机）
-        :param is_exit: 学员是否离线<0否,1是>（可选，默认随机）
-        :param asr_content: ASR内容（可选，默认随机生成）
-        :param knowledge_point: 知识点（可选，默认随机生成）
+        :param rank_asc: 排名（支持多个，用逗号分隔）
+        :param is_delete: 是否执行删除操作
+        :param is_update: 是否执行更新操作
         :return: (成功状态, 消息)
         """
         try:
             mysql_conn = mysqlMain('MySQL-wd-dw')
             
+            # 解析rank_asc列表
             rank_asc_list = [r.strip() for r in str(rank_asc).split(',') if r.strip()]
             
+            # 删除模式：根据user_id、user_unification_id和rank_asc删除数据
             if is_delete:
                 placeholders = ','.join(['%s'] * len(rank_asc_list))
                 delete_sql = f"""
@@ -504,6 +542,83 @@ class Dm_Script():
                 del mysql_conn
                 return True, f"成功删除{row_count}条数据"
             
+            # 更新模式：根据user_id、user_unification_id和rank_asc更新数据
+            if is_update:
+                update_fields = []
+                update_params = []
+                
+                # 构建更新字段（只更新传入的非空字段）
+                field_mapping = {
+                    'user_name': user_name,
+                    'brand_code': brand_code,
+                    'lp_id': lp_id,
+                    'lp_name': lp_name,
+                    'teacher_id': teacher_id,
+                    'teacher_name': teacher_name,
+                    'cate_sid': cate_sid,
+                    'cate_stage': cate_stage,
+                    'is_attend': is_attend,
+                    'is_late': is_late,
+                    'is_prepare': is_prepare,
+                    'frontal_face_rate': frontal_face_rate,
+                    'is_homework_submit': is_homework_submit,
+                    'is_homework_correct': is_homework_correct,
+                    'is_quick_answer': is_quick_answer,
+                    'quick_answer_cnt': quick_answer_cnt,
+                    'smile_rate': smile_rate,
+                    'completion_rate': completion_rate,
+                    'question_unlock_cnt': question_unlock_cnt,
+                    'course_evaluate_score': course_evaluate_score,
+                    'first_answer_true_rate': first_answer_true_rate,
+                    'homework_true_rate': homework_true_rate,
+                    'is_exit': is_exit,
+                    'asr_content': asr_content,
+                    'knowledge_point': knowledge_point
+                }
+                
+                for field, value in field_mapping.items():
+                    if value is not None and value != '':
+                        update_fields.append(f"{field} = %s")
+                        update_params.append(value)
+                
+                if not update_fields:
+                    del mysql_conn
+                    return False, "没有需要更新的字段"
+                
+                # 添加更新时间
+                update_fields.append("etl_time = NOW()")
+                
+                success_count = 0
+                results = []
+                
+                for single_rank_asc in rank_asc_list:
+                    # 检查数据是否存在
+                    check_sql = """
+                        SELECT rank_asc FROM dm_edu_com_lrn_user_live_f 
+                        WHERE user_id = %s AND user_unification_id = %s AND rank_asc = %s
+                    """
+                    existing = mysql_conn.fetchone(check_sql, (user_id, user_unification_id, single_rank_asc))
+                    
+                    if not existing:
+                        results.append(f"rank_asc={single_rank_asc}: 数据不存在，跳过")
+                        continue
+                    
+                    # 执行更新
+                    update_sql = f"""
+                        UPDATE dm_edu_com_lrn_user_live_f 
+                        SET {', '.join(update_fields)}
+                        WHERE user_id = %s AND user_unification_id = %s AND rank_asc = %s
+                    """
+                    params = update_params + [user_id, user_unification_id, single_rank_asc]
+                    mysql_conn.execute(update_sql, params)
+                    success_count += 1
+                    results.append(f"rank_asc={single_rank_asc}: 更新成功")
+                    print(f"成功更新数据: user_id={user_id}, user_unification_id={user_unification_id}, rank_asc={single_rank_asc}")
+                
+                del mysql_conn
+                return True, f"更新完成: 成功{success_count}条, 详情: {'; '.join(results)}"
+            
+            # 插入模式：先检查已存在的rank_asc，避免重复插入
             placeholders = ','.join(['%s'] * len(rank_asc_list))
             check_sql = f"""
                 SELECT rank_asc FROM dm_edu_com_lrn_user_live_f 
@@ -512,6 +627,7 @@ class Dm_Script():
             existing_ranks = mysql_conn.fetchall(check_sql, (user_id, user_unification_id, *rank_asc_list))
             existing_rank_set = {str(r['rank_asc']) for r in existing_ranks} if existing_ranks else set()
             
+            # 随机数据样本（用于未指定字段时生成默认值）
             teacher_names = ['孙林可']
             lp_names = ['谭新贵']
             stages = ['S6']
@@ -556,15 +672,19 @@ class Dm_Script():
             skip_count = 0
             results = []
             
+            # 遍历每个rank_asc，逐条处理
             for single_rank_asc in rank_asc_list:
+                # 跳过已存在的数据
                 if single_rank_asc in existing_rank_set:
                     skip_count += 1
                     results.append(f"rank_asc={single_rank_asc}: 已存在数据，跳过")
                     print(f"rank_asc={single_rank_asc} 已存在数据，跳过")
                     continue
                 
+                # 生成唯一的live_id
                 live_id = int(time.time() * 1000000) + int(single_rank_asc)
                 
+                # 处理各字段：如果未指定则使用默认值或随机生成
                 single_user_name = user_name if user_name else f'测试用户{random.randint(1000, 9999)}'
                 single_brand_code = brand_code if brand_code else 'VIP_WanDou'
                 single_lp_id = lp_id if lp_id else '667508'
@@ -591,6 +711,7 @@ class Dm_Script():
                 single_asr_content = asr_content if asr_content else random.choice(asr_contents)
                 single_knowledge_point = knowledge_point if knowledge_point else random.choice(knowledge_points)
                 
+                # 插入SQL语句
                 sql = """
                 INSERT INTO dm_edu_com_lrn_user_live_f (
                     user_id, user_unification_id, user_name, brand_code, lp_id, lp_name,
@@ -613,6 +734,7 @@ class Dm_Script():
                     single_knowledge_point, single_rank_asc
                 )
                 
+                # 执行插入
                 row_count = mysql_conn.execute(sql, params)
                 success_count += 1
                 results.append(f"rank_asc={single_rank_asc}: 成功插入")
@@ -620,6 +742,7 @@ class Dm_Script():
             
             del mysql_conn
             
+            # 返回处理结果统计
             msg = f"处理完成: 成功插入{success_count}条, 跳过{skip_count}条已存在数据"
             return True, msg
             
