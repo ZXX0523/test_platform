@@ -4,6 +4,7 @@
 
 /* ==================== 通用工具函数 ==================== */
 
+// 获取当前选中的环境（UAT / 预发布）
 function getSelectedEnv() {
     const envbox = document.getElementById("choose_env");
     const radios = envbox.getElementsByTagName("input");
@@ -15,6 +16,7 @@ function getSelectedEnv() {
     return 'test';
 }
 
+// 发送 GET 请求，结果展示到 #result，支持按钮 loading 状态
 function sendRequest(url, callback, btnElement = null) {
     document.getElementById("result").innerText = "处理中...";
     if (btnElement) btnElement.disabled = true;
@@ -34,12 +36,14 @@ function sendRequest(url, callback, btnElement = null) {
     };
 }
 
+// 将对象转换为 URL 查询字符串
 function buildUrlParams(params) {
     return Object.entries(params)
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join('&');
 }
 
+// 获取当前日期，格式：yyyy-MM-dd
 function getCurrentDate() {
     const date = new Date();
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -47,6 +51,7 @@ function getCurrentDate() {
 
 /* ==================== 业务功能函数 ==================== */
 
+// 更新PK战绩（胜/负场次）
 function PkRecord() {
     const params = {
         env: getSelectedEnv(),
@@ -57,6 +62,7 @@ function PkRecord() {
     sendRequest(`/dm_gubi/py/update_go_pk_record?${buildUrlParams(params)}`);
 }
 
+// 删除复习记录
 function DeleteReviewRecord() {
     const params = {
         env: getSelectedEnv(),
@@ -65,6 +71,7 @@ function DeleteReviewRecord() {
     sendRequest(`/dm_gubi/py/delete_review_record?${buildUrlParams(params)}`);
 }
 
+// 删除助力工具用户信息
 function DeleteHelpUtilUserinfo() {
     const params = {
         env: getSelectedEnv(),
@@ -73,6 +80,7 @@ function DeleteHelpUtilUserinfo() {
     sendRequest(`/dm_gubi/py/delete_help_util_userinfo?${buildUrlParams(params)}`);
 }
 
+// 更新课程完成状态
 function FinishedStatus() {
     const params = {
         env: getSelectedEnv(),
@@ -83,6 +91,7 @@ function FinishedStatus() {
     sendRequest(`/dm_gubi/py/update_course_finished_status?${buildUrlParams(params)}`);
 }
 
+// 删除会话记录（支持同步清理微信数据）
 function DeleteConversation() {
     const params = {
         env: getSelectedEnv(),
@@ -94,6 +103,7 @@ function DeleteConversation() {
     sendRequest(`/dm_gubi/py/delete_conversation?${buildUrlParams(params)}`);
 }
 
+// 更新用户开课时间
 function UpdateUserInfo() {
     const params = {
         choose_env: getSelectedEnv(),
@@ -103,6 +113,7 @@ function UpdateUserInfo() {
     sendRequest(`/dm_gubi/py/update_user_openclasstime?${buildUrlParams(params)}`);
 }
 
+// 插入聊天测试数据
 function InsertChatData() {
     const btn = document.getElementById("insert-chat-data-btn");
     const params = {
@@ -130,14 +141,40 @@ function ClearLearningSituationData() {
         return;
     }
     
+    // 检查是否选择了月度节点
+    const hasMonthly = nodeTypes.includes('MONTHLY');
+    const phases = document.getElementById("phases").value.trim();
+    
+    if (hasMonthly && !phases) {
+        document.getElementById("result").innerText = "选择月度节点时，阶段为必填项";
+        return;
+    }
+    
     const params = {
         env: getSelectedEnv(),
         student_id: document.getElementById("student_id").value,
-        node_types: nodeTypes.join(',')
+        node_types: nodeTypes.join(','),
+        phases: hasMonthly ? phases : ''
     };
     sendRequest(`/dm_gubi/py/clear_learning_situation_data?${buildUrlParams(params)}`);
 }
 
+// 切换阶段输入框状态（月度节点时启用）
+function togglePhasesInput() {
+    const monthlyCheckbox = document.querySelector('input[name="node_type"][value="MONTHLY"]');
+    const phasesInput = document.getElementById("phases");
+    
+    if (monthlyCheckbox && monthlyCheckbox.checked) {
+        phasesInput.disabled = false;
+        phasesInput.required = true;
+    } else {
+        phasesInput.disabled = true;
+        phasesInput.required = false;
+        phasesInput.value = '';
+    }
+}
+
+// 直播课数据操作（新增 / 删除 / 更新，由操作类型下拉框控制）
 function InsertDmEduComLrnUserLiveF() {
     const btn = document.getElementById("insert-live-data-btn");
     const operationType = document.getElementById("live_is_delete").value;
@@ -179,6 +216,7 @@ function InsertDmEduComLrnUserLiveF() {
 
 /* ==================== UI交互函数 ==================== */
 
+// 切换更新模式：选择"更新数据"时展开可选字段区域
 function toggleUpdateMode() {
     const operationType = document.getElementById("live_is_delete").value;
     const optionalFields = document.getElementById("optional-fields");
@@ -187,6 +225,7 @@ function toggleUpdateMode() {
     }
 }
 
+// 折叠/展开区域
 function toggleCollapse(id) {
     const content = document.getElementById(id);
     const icon = document.getElementById(id + '-icon');
@@ -199,6 +238,7 @@ function toggleCollapse(id) {
     }
 }
 
+// 初始化自定义下拉框（将原生 select 替换为自定义样式组件）
 function initCustomSelects() {
     document.querySelectorAll('.custom-select').forEach(select => {
         const wrapper = document.createElement('div');

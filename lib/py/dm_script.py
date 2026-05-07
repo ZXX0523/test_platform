@@ -447,8 +447,16 @@ class Dm_Script():
 
     # ==================== 学情数据相关 ====================
 
-    def clear_learning_situation_data(self, choose_url, student_id, node_types):
-        """清理学习情况数据（软删除，标记为已删除）"""
+    def clear_learning_situation_data(self, choose_url, student_id, node_types, phases=None):
+        """
+        清理学习情况数据（软删除，标记为已删除）
+        
+        参数:
+            choose_url: 环境标识
+            student_id: 学生ID
+            node_types: 节点类型（支持逗号分隔的多个类型）
+            phases: 阶段（仅当node_type=MONTHLY时生效，支持逗号分隔的多个阶段）
+        """
         mysql_conn = self._get_mysql_conn(choose_url, 'ob')
         
         try:
@@ -458,6 +466,14 @@ class Dm_Script():
             else:
                 node_type_list = [str(node_types)]
             
+            # 解析阶段（支持逗号分隔的多个阶段）
+            phase_list = None
+            if phases:
+                if isinstance(phases, str):
+                    phase_list = [p.strip() for p in phases.split(',') if p.strip()]
+                else:
+                    phase_list = [str(phases)]
+            
             results = []
             success_count = 0
             
@@ -465,35 +481,62 @@ class Dm_Script():
                 node_type = node_type.strip()
                 if not node_type:
                     continue
-                    
-                # 查询学习情况数据
-                query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_type = %s AND is_deleted = 0"
-                result = mysql_conn.fetchone(query, (student_id, node_type))
                 
-                if result:
-                    intervention_task_id = result.get('intervention_task_id', 0)
-                    
-                    # 软删除学习情况数据
-                    update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_type = %s"
-                    mysql_conn.execute(update_query, (student_id, node_type))
-                    print(f"已标记学习情况数据为已删除，student_id: {student_id}, node_type: {node_type}")
-                    
-                    # 如果有关联的干预任务，也进行软删除
-                    if intervention_task_id != 0:
-                        update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
-                        mysql_conn.execute(update_intervention_query, (intervention_task_id,))
-                        print(f"已标记干预任务数据为已删除，intervention_task_id: {intervention_task_id}")
-                    
-                    results.append(f"节点类型{node_type}: 操作成功")
-                    success_count += 1
+                # 月度数据处理（node_type=MONTHLY且有phases参数）
+                if node_type.upper() == 'MONTHLY' and phase_list:
+                    for phase in phase_list:
+                        # 查询月度学习情况数据
+                        query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_type = %s AND phase = %s AND is_deleted = 0"
+                        result = mysql_conn.fetchone(query, (student_id, node_type, phase))
+                        
+                        if result:
+                            intervention_task_id = result.get('intervention_task_id', 0)
+                            
+                            # 软删除月度学习情况数据
+                            update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_type = %s AND phase = %s"
+                            mysql_conn.execute(update_query, (student_id, node_type, phase))
+                            print(f"已标记月度学习情况数据为已删除，student_id: {student_id}, node_type: {node_type}, phase: {phase}")
+                            
+                            # 如果有关联的干预任务，也进行软删除
+                            if intervention_task_id != 0:
+                                update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
+                                mysql_conn.execute(update_intervention_query, (intervention_task_id,))
+                                print(f"已标记干预任务数据为已删除，intervention_task_id: {intervention_task_id}")
+                            
+                            results.append(f"月度数据(node_type={node_type}, phase={phase}): 操作成功")
+                            success_count += 1
+                        else:
+                            print(f"未找到月度学习情况数据，student_id: {student_id}, node_type: {node_type}, phase: {phase}")
+                            results.append(f"月度数据(node_type={node_type}, phase={phase}): 未找到数据")
                 else:
-                    print(f"未找到学习情况数据，student_id: {student_id}, node_type: {node_type}")
-                    results.append(f"节点类型{node_type}: 未找到学习情况数据")
+                    # 普通节点类型处理
+                    query = "SELECT * FROM `i61-eos-ai-advisor`.learning_situation_student WHERE student_id = %s AND node_type = %s AND is_deleted = 0"
+                    result = mysql_conn.fetchone(query, (student_id, node_type))
+                    
+                    if result:
+                        intervention_task_id = result.get('intervention_task_id', 0)
+                        
+                        # 软删除学习情况数据
+                        update_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_student SET is_deleted = 1 WHERE student_id = %s AND node_type = %s"
+                        mysql_conn.execute(update_query, (student_id, node_type))
+                        print(f"已标记学习情况数据为已删除，student_id: {student_id}, node_type: {node_type}")
+                        
+                        # 如果有关联的干预任务，也进行软删除
+                        if intervention_task_id != 0:
+                            update_intervention_query = "UPDATE `i61-eos-ai-advisor`.learning_situation_intervention_task SET is_deleted = 1 WHERE id = %s"
+                            mysql_conn.execute(update_intervention_query, (intervention_task_id,))
+                            print(f"已标记干预任务数据为已删除，intervention_task_id: {intervention_task_id}")
+                        
+                        results.append(f"节点类型{node_type}: 操作成功")
+                        success_count += 1
+                    else:
+                        print(f"未找到学习情况数据，student_id: {student_id}, node_type: {node_type}")
+                        results.append(f"节点类型{node_type}: 未找到学习情况数据")
             
             if success_count > 0:
-                return True, f"成功清理{success_count}个节点类型，详细信息：{'; '.join(results)}"
+                return True, f"成功清理{success_count}条数据，详细信息：{'; '.join(results)}"
             else:
-                return False, f"所有节点类型均未找到数据。详细信息：{'; '.join(results)}"
+                return False, f"所有条件均未找到数据。详细信息：{'; '.join(results)}"
                 
         except Exception as e:
             print(f"操作失败: {str(e)}")

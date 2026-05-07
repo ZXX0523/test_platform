@@ -16,8 +16,8 @@
     </div>
 
     <!-- 环境选择区域 -->
-    <div class="env-card">
-        <div class="env-title">
+    <div class="env-card" style="display:flex;align-items:center;gap:12px;">
+        <div class="env-title" style="margin:0;white-space:nowrap;">
             <span class="red">*</span>运行环境
         </div>
         <div role="radiogroup" class="el-radio-group bor" id="choose_env">
@@ -44,7 +44,7 @@
         <div class="tab-item" data-tab="tab6">删除会话数据</div>
         <div class="tab-item" data-tab="tab7">插入企微聊天数据</div>
         <div class="tab-item" data-tab="tab8">清理学情数据&任务</div>
-        <div class="tab-item" data-tab="tab9">插入/清理学情数据</div>
+        <div class="tab-item" data-tab="tab9">增/删/改学情数据</div>
     </div>
 
     <!-- 表单1：更新学员开课日（样式统一） -->
@@ -272,7 +272,16 @@
                             <input type="checkbox" name="node_type" value="FIRST_MONTH">
                             <span>首月节点</span>
                         </label>
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="node_type" value="MONTHLY" onchange="togglePhasesInput()">
+                            <span>月度节点</span>
+                        </label>
                     </div>
+                </div>
+                <label class="form-label">阶段(月度)</label>
+                <div class="form-control">
+                    <input id="phases" type="text" name="phases" autocomplete="off" placeholder="月度节点必填，多个用逗号分隔，如：2,3,4"
+                           class="el-input__inner" disabled/>
                 </div>
                 <label class="form-label"></label>
                 <div class="form-control">
@@ -297,14 +306,14 @@
                             <option value="1">删除数据</option>
                         </select>
                     </div>
-                    <label class="form-label"><span class="red">*</span>豌豆ID</label>
-                    <div class="form-control">
-                        <input id="live_user_id" type="text" name="user_id" autocomplete="off" placeholder="请输入豌豆ID"
-                               class="el-input__inner" required/>
-                    </div>
                     <label class="form-label"><span class="red">*</span>大用户ID</label>
                     <div class="form-control">
                         <input id="live_user_unification_id" type="text" name="user_unification_id" autocomplete="off" placeholder="请输入大用户ID"
+                               class="el-input__inner" required/>
+                    </div>
+                    <label class="form-label"><span class="red">*</span>豌豆ID</label>
+                    <div class="form-control">
+                        <input id="live_user_id" type="text" name="user_id" autocomplete="off" placeholder="请输入豌豆ID"
                                class="el-input__inner" required/>
                     </div>
                     <label class="form-label"><span class="red">*</span>课节顺序</label>
@@ -329,7 +338,7 @@
                 <div class="collapse-content" id="optional-fields" style="display: none;">
                     <!-- 课程信息 -->
                     <div class="form-section">
-                        <div class="form-section-title">课程信息</div>
+                        <div class="form-section-title">课程信息<span class="tooltip"><span class="tooltip-text">不填则随机，填写则按指定值生成</span></span></div>
                         <div class="form-grid">
                             <label class="form-label">品牌代码</label>
                             <div class="form-control">

@@ -156,8 +156,9 @@ def clear_learning_situation_data():
     env = flask.request.values.get('env')
     student_id = flask.request.values.get('student_id')
     node_types = flask.request.values.get('node_types')
+    phases = flask.request.values.get('phases')
     try:
-        res = Dm_Script().clear_learning_situation_data(env, student_id, node_types)
+        res = Dm_Script().clear_learning_situation_data(env, student_id, node_types, phases)
         print(res)
     except KeyError as e:
         res = {"msg": "处理失败", "code": 201, "data": e}
