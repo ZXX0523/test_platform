@@ -1,5 +1,5 @@
 # 基于的基础镜像
-FROM python:3.7
+FROM python:3.7-slim
 
 # 维护者信息
 MAINTAINER yanling.fang
@@ -8,20 +8,11 @@ MAINTAINER yanling.fang
 WORKDIR /icode_test_platform
 
 COPY requirements.txt ./
-RUN pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
 COPY . .
 
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-RUN sed -i s@/security.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-RUN apt-get clean
-# RUN apt-get update
-
-
-# RUN apt-get -y install vim
-
-
-# 调整时区
-RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 
 CMD ["gunicorn", "app:app", "-c", "./gunicorn.conf.py"]

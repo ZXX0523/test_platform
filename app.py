@@ -54,4 +54,4 @@ def halloHtml():
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     # app.run(host='127.0.0.1', port=8088, debug=True, threaded=True, processes=1)
-    app.run(host='10.200.13.188', port=8088, debug=True, threaded=True, processes=1)
+    app.run(host='10.200.13.188', port=8003, debug=True, threaded=True, processes=1)

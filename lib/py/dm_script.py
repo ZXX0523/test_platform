@@ -28,6 +28,9 @@ class Dm_Script():
     # ==================== 配置信息 ====================
 
     # 数据库连接配置：按环境(test/pre)和业务类型(liuyi/gubi/ob)分类
+    # liuyi: 六一业务数据库，包含微信会话、企微关系等
+    # gubi: 围棋业务数据库，包含对弈记录、课程、复盘等
+    # ob: OB业务数据库，包含学情数据、干预任务等
     DB_CONFIG = {
         'liuyi': {'test': 'MySQL-Liuyi-test', 'pre': 'MySQL-Liuyi-preprod'},
         'gubi': {'test': 'MySQL-Gubi-test', 'pre': 'MySQL-Gubi-preprod'},
@@ -49,7 +52,12 @@ class Dm_Script():
     # ==================== 私有方法 ====================
 
     def _get_mysql_conn(self, env, db_type='liuyi'):
-        """获取数据库连接"""
+        """
+        获取数据库连接
+        :param env: 环境标识 (test/pre)
+        :param db_type: 数据库类型 (liuyi/gubi/ob)
+        :return: MySQL连接对象
+        """
         env_key = 'test' if env == 'test' else 'pre'
         db_name = self.DB_CONFIG.get(db_type, {}).get(env_key, 'MySQL-Liuyi-test')
         return mysqlMain(db_name)
@@ -60,9 +68,14 @@ class Dm_Script():
         return self.URL_CONFIG.get(env_key, {}).get(url_type, '')
 
     def _delete_redis_key(self, choose_url, key_pattern):
-        """删除Redis缓存键，用于数据更新后清除缓存"""
+        """
+        删除Redis缓存键
+        用于数据更新后清除缓存，确保下次查询获取最新数据
+        :param choose_url: 环境标识 (test/pre)
+        :param key_pattern: Redis键名或匹配模式
+        """
         try:
-            # 根据环境选择Redis主机
+            # 根据环境选择Redis主机：test环境使用redis-test，pre环境使用preprod1
             redis_host = 'redis-test.61info.cn' if choose_url == "test" else 'preprod1.61draw.com'
             redis_client = redis.Redis(host=redis_host, port=6379, db=7)
             if redis_client.exists(key_pattern):
@@ -158,7 +171,7 @@ class Dm_Script():
             self._delete_redis_key(choose_url, redis_key)
         except Exception as e:
             return False, "执行异常"
-        return True, "修改成功", f"开课日更新为：{open_class_time}"
+        return True, f"开课日更新为：{open_class_time}"
 
     def select_dm_wechat_data_for_name(self, env, name, business_id):
         """根据名称查询微信数据"""
@@ -214,7 +227,16 @@ class Dm_Script():
         mysql_conn.execute(sql)
 
     def dm_wechat_script_all(self, env, user_id, name, business_id, clear_wechat_data):
-        """清理微信会话相关数据（批量操作，可选择性清理聊天记录）"""
+        """
+        清理微信会话相关数据（批量操作）
+        流程：查询会话 -> 删除会话表 -> 删除意图表 -> (可选)删除聊天记录和用户关系
+        :param env: 环境标识
+        :param user_id: 用户ID
+        :param name: 会话名称/昵称
+        :param business_id: 业务ID
+        :param clear_wechat_data: 是否清理聊天记录 (1=清理, 0=不清理)
+        :return: (成功状态, 消息)
+        """
         print("开始执行清理数据")
         print("打印环境choose_env：", env, user_id, name, business_id, clear_wechat_data)
         
@@ -251,8 +273,17 @@ class Dm_Script():
             return False, "执行异常"
 
     def insert_user_chat_data(self, env, user_id, external_user_id, data_str, brand_code):
-        """插入用户聊天数据（支持文本和图片消息）"""
-        # 清理JSON字符串中的特殊字符
+        """
+        插入用户聊天数据（模拟企微聊天记录）
+        支持文本消息和图片消息，根据content中是否包含【图片】判断
+        :param env: 环境标识
+        :param user_id: 坐席微信ID（发送方/接收方）
+        :param external_user_id: 外部用户微信ID
+        :param data_str: JSON格式的消息数据，格式：[{"role":"user/assistant","content":"消息内容"}]
+        :param brand_code: 品牌代码 (VIP_WanDou等)
+        :return: (成功状态, 消息)
+        """
+        # 清理JSON字符串中的特殊字符（处理转义和不可见字符）
         data_str = re.sub(r'[\x00-\x1F]|\x7F', '', data_str)
         data_str = re.sub(r'\\(?![/u"])', r'', data_str)
         cleaned_data = data_str.encode('utf-8', errors='ignore').decode('utf-8')
@@ -296,7 +327,15 @@ class Dm_Script():
     # ==================== 课程相关操作 ====================
 
     def update_course_finished_status(self, choose_url, user_id, finished, finished_2=None):
-        """更新课程完成状态（可将课程标记为已完成或未完成）"""
+        """
+        更新课程完成状态
+        用于将用户的体验课标记为已完成或未完成状态
+        :param choose_url: 环境标识
+        :param user_id: 用户ID
+        :param finished: 第一节课状态 (1=已完成, 0=未完成)
+        :param finished_2: 第二节课状态（可选）
+        :return: (成功状态, 消息)
+        """
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
             # 查询用户的体验课课程ID
@@ -338,36 +377,44 @@ class Dm_Script():
             return False, f"插入失败: {str(e)}"
 
     def update_go_pk_record(self, choose_url, user_id, win, lose):
-        """更新围棋对弈记录（先删除旧记录，再插入新记录）"""
+        """
+        更新围棋对弈记录
+        流程：删除旧记录 -> 插入胜利记录 -> 插入失败记录 -> 清除缓存
+        :param choose_url: 环境标识
+        :param user_id: 用户ID
+        :param win: 胜利场次
+        :param lose: 失败场次
+        :return: (成功状态, 消息)
+        """
         try:
             mysql_conn = self._get_mysql_conn(choose_url, 'gubi')
 
-            if user_id is not None and win is not None and lose is not None:
-                # 先删除旧的对弈记录
-                mysql_conn.execute(f'DELETE FROM pjx_go.t_go_play_pk_record where user_id ={user_id}')
+            if user_id and win and lose:
+                # 删除旧记录
+                mysql_conn.execute('DELETE FROM pjx_go.t_go_play_pk_record WHERE user_id = %s', (user_id,))
                 
-                # 胜利记录SQL（result=1表示胜利）
-                sql_win = "INSERT INTO pjx_go.t_go_play_pk_record VALUES(NULL, 2, {}, '2026-01-19 18:09:05', 1, '9路吃子', 1, 1, 'Ceslin', 46, 'test', 2, 2, 2, 0, 0, 1, 3, 5.5, 3, 0, 0, 1, NULL, 1, 1, 0, '白吃3子', 0, 3, 0, 0, 0.00, 0.00, 33, 16, '2025-12-04 14:56:11', '2026-01-19 18:09:05');".format(user_id)
-                # 失败记录SQL（result=2表示失败）
-                sql_lose = "INSERT INTO pjx_go.t_go_play_pk_record VALUES(NULL, 2, {}, '2026-01-19 18:09:05', 1, '9路吃子', 1, 1, 'Ceslin', 46, 'test', 2, 2, 2, 0, 0, 1, 3, 5.5, 3, 0, 0, 1, NULL, 2, 1, 0, '白吃3子', 0, 3, 0, 0, 0.00, 0.00, 33, 16, '2025-12-04 14:56:11', '2026-01-19 18:09:05');".format(user_id)
+                # 插入记录模板（result: 1=胜利, 2=失败）
+                insert_sql = """
+                    INSERT INTO pjx_go.t_go_play_pk_record VALUES(
+                        NULL, 2, %s, NOW(), 1, '9路吃子', 1, 1, 'Ceslin', 46, 'test',
+                        2, 2, 2, 0, 0, 1, 3, 5.5, 3, 0, 0, 1, NULL, %s, 1, 0,
+                        '白吃3子', 0, 3, 0, 0, 0.00, 0.00, 33, 16, NOW(), NOW()
+                    )
+                """
                 
-                # 批量插入胜利记录
-                for i in range(int(win)):
-                    mysql_conn.execute(sql_win)
-                    print(f"插入第：{i+1}条数据")
-                    
-                # 批量插入失败记录
-                for i in range(int(lose)):
-                    mysql_conn.execute(sql_lose)
-                    print(f"插入第：{i+1}条数据")
-                    
+                # 批量插入胜利和失败记录
+                for result, count in [(1, int(win)), (2, int(lose))]:
+                    for i in range(count):
+                        mysql_conn.execute(insert_sql, (user_id, result))
+                        print(f"插入第 {i+1} 条数据 (result={result})")
+                
                 # 清除Redis缓存
                 redis_key = f"i61-eos-copilot:cache:pjx:getUserPlayChessData{user_id}"
                 self._delete_redis_key(choose_url, redis_key)
                 
-                return True, "对弈数据更新成功"
+                return True, f"对弈数据更新成功，胜利{win}场，失败{lose}场"
             else:
-                return False, "对弈数据更新成功"
+                return False, "参数不完整"
         except Exception as e:
             return False, f"插入失败: {str(e)}"
 
