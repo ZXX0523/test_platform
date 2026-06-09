@@ -324,6 +324,30 @@ class Dm_Script():
         except Exception as e:
             return False, f"插入失败: {str(e)}"
 
+    def delete_user_chat_data(self, env, user_id, external_user_id, brand_code):
+        """
+        删除用户聊天记录
+        根据坐席微信ID和外部用户微信ID删除所有聊天记录
+        :param env: 环境标识
+        :param user_id: 坐席微信ID
+        :param external_user_id: 外部用户微信ID
+        :param brand_code: 品牌代码 (VIP_WanDou等)
+        :return: (成功状态, 消息)
+        """
+        try:
+            mysql_conn = self._get_mysql_conn(env, 'liuyi')
+            # 删除坐席和外部用户之间的所有聊天记录
+            sql = f"""DELETE FROM `i61-bizcenter-corpwechat`.cw_chat_data 
+                      WHERE biz_code = '{brand_code}'
+                      AND ((from_user = '{user_id}' AND to_user = '{external_user_id}') 
+                      OR (from_user = '{external_user_id}' AND to_user = '{user_id}'))
+                      AND external_user = '{external_user_id}'"""
+            print(sql)
+            affected_rows = mysql_conn.execute(sql)
+            return True, f"成功删除 {affected_rows} 条聊天记录"
+        except Exception as e:
+            return False, f"删除失败: {str(e)}"
+
     # ==================== 课程相关操作 ====================
 
     def update_course_finished_status(self, choose_url, user_id, finished, finished_2=None):

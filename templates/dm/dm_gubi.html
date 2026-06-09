@@ -42,8 +42,8 @@
         <div class="tab-item" data-tab="tab4">删除已约复盘数据</div>
         <div class="tab-item" data-tab="tab5">删除助力工具信息</div>
         <div class="tab-item" data-tab="tab6">删除会话数据</div>
-        <div class="tab-item" data-tab="tab7">插入企微聊天数据</div>
-        <div class="tab-item" data-tab="tab8">清理学情数据&任务</div>
+        <div class="tab-item" data-tab="tab7">增加/删除企微聊天数据</div>
+        <div class="tab-item" data-tab="tab8">清理学情干预任务</div>
         <div class="tab-item" data-tab="tab9">增/删/改学情数据</div>
     </div>
 
@@ -187,7 +187,7 @@
                         <option value="28">派培优</option>
                     </select>
                 </div>
-                <label class="form-label"><span class="red">*</span>清理企微数据<span class="tooltip"><span class="tooltip-text">删除跟学员的绑定关系和企微会话存档的聊天记录</span></span></label>
+                <label class="form-label"><span class="red">*</span>清理企微数据<span class="tooltip"><span class="tooltip-text">删除侧边栏的学员绑定关系和企微会话存档的聊天记录</span></span></label>
                 <div class="form-control">
                     <select id="clear_wechat_data" class="custom-select">
                         <option value="0">否</option>
@@ -204,6 +204,13 @@
     <div class="form-panel" id="tab7">
         <form id="submit_deleta_conversation" onsubmit="event.preventDefault(); InsertChatData()">
             <div class="form-grid">
+                <label class="form-label">操作类型</label>
+                <div class="form-control">
+                    <select id="chat_operation_type" class="custom-select" onchange="toggleChatDataInput()">
+                        <option value="insert">插入数据</option>
+                        <option value="delete">删除数据</option>
+                    </select>
+                </div>
                 <label class="form-label"><span class="red">*</span>坐席的企微账号id</label>
                 <div class="form-control">
                     <input id="chat_seat_wechatid" name="seat_wechatid" autocomplete="off" placeholder="请输入AI坐席管理页面的账号ID"
@@ -214,8 +221,8 @@
                     <input id="chat_user_wechatname" name="user_wechatname" autocomplete="off" placeholder="请输入对话管理页面的微信ID"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label"><span class="red">*</span>业务线</label>
-                <div class="form-control">
+                <label id="chat_brand_label" class="form-label"><span class="red">*</span>业务线</label>
+                <div id="chat_brand_control" class="form-control">
                     <select id="chat_courseType" class="custom-select">
                         <option value="AI">围棋</option>
                         <option value="XDT">小灯塔</option>
@@ -223,9 +230,9 @@
                         <option value="WANDOU_PPY">派培优</option>
                     </select>
                 </div>
-                <label class="form-label"><span class="red">*</span>聊天数据<span class="tooltip"><span class="tooltip-text">数据是插入企微会话存档表(cw_chat_data)</span></span></label>
-                <div class="form-control">
-                    <textarea class="el-textarea__inner" id="chat_message_data_str" name="message_data_str" placeholder="请输入聊天数据" required>
+                <label id="chat_data_label" class="form-label"><span class="red">*</span>聊天数据<span class="tooltip"><span class="tooltip-text">数据是插入企微会话存档表(cw_chat_data)</span></span></label>
+                <div id="chat_data_control" class="form-control">
+                    <textarea class="el-textarea__inner" id="chat_message_data_str" name="message_data_str" placeholder="请输入聊天数据" required oninput="validateChatJson()">
 [{
     "content":"老师你好呀",
     "role":"user"
@@ -239,10 +246,11 @@
     "role":"user"
 }]
                     </textarea>
+                    <div id="chat_json_error" class="json-error-msg" style="color: #f56c6c; font-size: 12px; margin-top: 4px; display: none;"></div>
                 </div>
                 <label class="form-label"></label>
                 <div class="form-control">
-                    <button type="submit" class="el-button" id="insert-chat-data-btn">确认插入数据</button>
+                    <button type="submit" class="el-button" id="chat-submit-btn">确认插入数据</button>
                 </div>
             </div>
         </form>

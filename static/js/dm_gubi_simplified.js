@@ -113,17 +113,97 @@ function UpdateUserInfo() {
     sendRequest(`/dm_gubi/py/update_user_openclasstime?${buildUrlParams(params)}`);
 }
 
-// 插入聊天测试数据
+// 切换聊天数据输入框显示
+function toggleChatDataInput() {
+    const operationType = document.getElementById('chat_operation_type').value;
+    const brandLabel = document.getElementById('chat_brand_label');
+    const brandControl = document.getElementById('chat_brand_control');
+    const dataLabel = document.getElementById('chat_data_label');
+    const dataControl = document.getElementById('chat_data_control');
+    const submitBtn = document.getElementById('chat-submit-btn');
+    
+    if (operationType === 'delete') {
+        brandLabel.style.display = '';
+        brandControl.style.display = '';
+        dataLabel.style.display = 'none';
+        dataControl.style.display = 'none';
+        submitBtn.textContent = '确认删除数据';
+        submitBtn.style.backgroundColor = '#f56c6c';
+    } else {
+        brandLabel.style.display = '';
+        brandControl.style.display = '';
+        dataLabel.style.display = '';
+        dataControl.style.display = '';
+        submitBtn.textContent = '确认插入数据';
+        submitBtn.style.backgroundColor = '';
+    }
+}
+
+// JSON格式校验
+function validateChatJson() {
+    const textarea = document.getElementById('chat_message_data_str');
+    const errorDiv = document.getElementById('chat_json_error');
+    const submitBtn = document.getElementById('chat-submit-btn');
+    const value = textarea.value.trim();
+    
+    if (!value) {
+        errorDiv.style.display = 'none';
+        textarea.style.borderColor = '';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.style.cursor = '';
+        return true;
+    }
+    
+    try {
+        const parsed = JSON.parse(value);
+        if (!Array.isArray(parsed)) {
+            throw new Error('数据必须是JSON数组格式');
+        }
+        errorDiv.style.display = 'none';
+        textarea.style.borderColor = '#67c23a';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.style.cursor = '';
+        return true;
+    } catch (e) {
+        errorDiv.textContent = 'JSON格式错误: ' + e.message;
+        errorDiv.style.display = 'block';
+        textarea.style.borderColor = '#f56c6c';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+        return false;
+    }
+}
+
+// 插入或删除聊天数据
 function InsertChatData() {
-    const btn = document.getElementById("insert-chat-data-btn");
+    const operationType = document.getElementById('chat_operation_type').value;
+    const btn = document.getElementById('chat-submit-btn');
     const params = {
         env: getSelectedEnv(),
         user_id: document.getElementById("chat_seat_wechatid").value,
         external_user_id: document.getElementById("chat_user_wechatname").value,
-        brand_code: document.getElementById('chat_courseType').value,
-        data_str: document.getElementById('chat_message_data_str').value
+        brand_code: document.getElementById('chat_courseType').value
     };
-    sendRequest(`/dm_gubi/py/insert_chat_data?${buildUrlParams(params)}`, null, btn);
+    
+    if (operationType === 'delete') {
+        // 删除操作
+        if (!params.user_id || !params.external_user_id) {
+            document.getElementById("result").innerText = "请填写坐席微信ID和用户微信ID";
+            return;
+        }
+        sendRequest(`/dm_gubi/py/delete_chat_data?${buildUrlParams(params)}`, null, btn);
+    } else {
+        // 插入操作
+        if (!validateChatJson()) {
+            document.getElementById("result").innerText = "请修正JSON格式错误后再提交";
+            return;
+        }
+        params.data_str = document.getElementById('chat_message_data_str').value;
+        sendRequest(`/dm_gubi/py/insert_chat_data?${buildUrlParams(params)}`, null, btn);
+    }
 }
 
 function ClearLearningSituationData() {

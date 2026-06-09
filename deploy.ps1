@@ -34,5 +34,5 @@ docker ps | Select-String "testflask"
 
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "Deploy Complete!" -ForegroundColor Green
-Write-Host "URL: http://localhost:8088/dm_gubi/py/dm_gubi" -ForegroundColor Green
+Write-Host "URL: http://localhost:8088" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green

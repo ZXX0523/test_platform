@@ -77,6 +77,21 @@ def insert_chat_data():
     pass
     print(json.dumps(res, ensure_ascii=False))
     return json.dumps(res, ensure_ascii=False)
+
+@dm_gubi.route('/py/delete_chat_data')
+def delete_chat_data():
+    env = flask.request.values.get('env')
+    user_id = flask.request.values.get('user_id')
+    external_user_id = flask.request.values.get('external_user_id')
+    brand_code = flask.request.values.get('brand_code')
+    try:
+        res = Dm_Script().delete_user_chat_data(env, user_id, external_user_id, brand_code)
+        print(res)
+    except KeyError as e:
+        res = {"msg": "处理失败", "code": 201, "data": str(e)}
+    print(json.dumps(res, ensure_ascii=False))
+    return json.dumps(res, ensure_ascii=False)
+
 @dm_gubi.route('/py/update_course_finished_status')
 def update_course_finished_status():
     env = flask.request.values.get('env')
