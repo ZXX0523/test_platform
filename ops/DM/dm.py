@@ -236,3 +236,19 @@ def insert_dm_edu_com_lrn_user_live_f():
     
     print(json.dumps(res, ensure_ascii=False))
     return json.dumps(res, ensure_ascii=False)
+
+@dm_gubi.route('/py/delete_user_extend_field')
+def delete_user_extend_field():
+    env = flask.request.values.get('env')
+    brand_code = flask.request.values.get('brand_code')
+    unification_id = flask.request.values.get('unification_id')
+    field_names = flask.request.values.get('field_names', '')
+    try:
+        res = Dm_Script().delete_user_extend_field(env, brand_code, unification_id, field_names)
+        print(res)
+    except KeyError as e:
+        res = {"msg": "处理失败", "code": 201, "data": str(e)}
+    except Exception as e:
+        res = {"msg": f"处理失败: {str(e)}", "code": 201, "data": None}
+    print(json.dumps(res, ensure_ascii=False))
+    return json.dumps(res, ensure_ascii=False)

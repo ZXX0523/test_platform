@@ -34,7 +34,8 @@ class Dm_Script():
     DB_CONFIG = {
         'liuyi': {'test': 'MySQL-Liuyi-test', 'pre': 'MySQL-Liuyi-preprod'},
         'gubi': {'test': 'MySQL-Gubi-test', 'pre': 'MySQL-Gubi-preprod'},
-        'ob': {'test': 'MySQL-ob-test', 'pre': 'MySQL-ob-preprod'}
+        'ob': {'test': 'MySQL-ob-test', 'pre': 'MySQL-ob-preprod'},
+        'eos_basic': {'test': 'MySQL-wd-test', 'pre': 'MySQL-wd-preprod'}
     }
 
     # 接口URL配置：demo课相关接口
@@ -863,6 +864,38 @@ class Dm_Script():
         except Exception as e:
             print(f"插入数据失败: {str(e)}")
             return False, f"插入失败: {str(e)}"
+
+    # ==================== 用户扩展字段操作 ====================
+
+    def delete_user_extend_field(self, env, brand_code, unification_id, field_names=''):
+        """
+        删除用户扩展字段数据
+        根据品牌代码和大用户ID删除 eos_basic.user_extend_field 表中的数据
+        :param env: 环境标识（注意：eos_basic 数据库目前只有一套配置）
+        :param brand_code: 品牌代码 (VIP_Maths, VIP_WanDou, VIP_YuWen 等)
+        :param unification_id: 大用户ID
+        :param field_names: 要删除的字段名，逗号分隔（如 'studentStage,grade'），为空则删除全部
+        :return: (成功状态, 消息)
+        """
+        try:
+            mysql_conn = self._get_mysql_conn(env, 'eos_basic')
+            
+            if field_names:
+                # 删除指定字段
+                field_list = field_names.split(',')
+                field_list_str = "','".join(field_list)
+                sql = f"""DELETE FROM eos_basic.user_extend_field WHERE brand_code='{brand_code}' AND unification_id='{unification_id}' AND field_name IN ('{field_list_str}')"""
+            else:
+                # 删除全部字段
+                sql = f"""DELETE FROM eos_basic.user_extend_field WHERE brand_code='{brand_code}' AND unification_id='{unification_id}'"""
+            
+            print(sql)
+            affected_rows = mysql_conn.execute(sql)
+            print(f"删除了 {affected_rows} 条记录")
+            return True, f"成功删除 {affected_rows} 条记录"
+        except Exception as e:
+            print(f"删除失败: {str(e)}")
+            return False, f"删除失败: {str(e)}"
 
 if __name__ == '__main__':
     print("执行开始。。。。")

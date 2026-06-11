@@ -254,6 +254,26 @@ function togglePhasesInput() {
     }
 }
 
+// 删除用户扩展字段
+function DeleteUserExtendField() {
+    // 获取选中的字段名
+    const fieldCheckboxes = document.querySelectorAll('input[name="extend_field_name"]');
+    const fieldNames = [];
+    for (let i = 0; i < fieldCheckboxes.length; i++) {
+        if (fieldCheckboxes[i].checked) {
+            fieldNames.push(fieldCheckboxes[i].value);
+        }
+    }
+    
+    const params = {
+        env: getSelectedEnv(),
+        brand_code: document.getElementById("extend_field_brand_code").value,
+        unification_id: document.getElementById("extend_field_unification_id").value,
+        field_names: fieldNames.join(',')
+    };
+    sendRequest(`/dm_gubi/py/delete_user_extend_field?${buildUrlParams(params)}`);
+}
+
 // 直播课数据操作（新增 / 删除 / 更新，由操作类型下拉框控制）
 function InsertDmEduComLrnUserLiveF() {
     const btn = document.getElementById("insert-live-data-btn");
@@ -374,4 +394,77 @@ document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('opencourseday');
     if (input) input.value = getCurrentDate();
     initCustomSelects();
+});
+
+/* ==================== 多选下拉框功能 ==================== */
+
+// 切换多选下拉框的展开/收起状态
+function toggleMultiSelect(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    // 关闭其他已打开的下拉框
+    document.querySelectorAll('.multi-select-wrapper.open').forEach(el => {
+        if (el.id !== wrapperId) {
+            el.classList.remove('open');
+        }
+    });
+    
+    wrapper.classList.toggle('open');
+}
+
+// 更新已选标签显示
+function updateMultiSelectTags(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]:checked');
+    const tagsContainer = wrapper.querySelector('.multi-select-tags');
+    const placeholder = wrapper.querySelector('.multi-select-placeholder');
+    
+    // 清空标签容器
+    tagsContainer.innerHTML = '';
+    
+    if (checkboxes.length === 0) {
+        placeholder.style.display = 'block';
+    } else {
+        placeholder.style.display = 'none';
+        checkboxes.forEach(cb => {
+            const tag = document.createElement('span');
+            tag.className = 'multi-select-tag';
+            tag.innerHTML = `${cb.nextElementSibling.textContent}<span class="remove-tag" onclick="removeMultiSelectTag('${wrapperId}', '${cb.value}')">×</span>`;
+            tagsContainer.appendChild(tag);
+        });
+    }
+}
+
+// 移除单个已选标签
+function removeMultiSelectTag(wrapperId, value) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    const checkbox = wrapper.querySelector(`input[value="${value}"]`);
+    if (checkbox) {
+        checkbox.checked = false;
+        updateMultiSelectTags(wrapperId);
+    }
+}
+
+// 清除所有已选项
+function clearMultiSelect(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    updateMultiSelectTags(wrapperId);
+}
+
+// 点击页面其他地方关闭下拉框
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.multi-select-wrapper')) {
+        document.querySelectorAll('.multi-select-wrapper.open').forEach(el => {
+            el.classList.remove('open');
+        });
+    }
 });

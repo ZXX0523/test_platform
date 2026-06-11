@@ -45,6 +45,7 @@
         <div class="tab-item" data-tab="tab7">增加/删除企微聊天数据</div>
         <div class="tab-item" data-tab="tab8">清理学情干预任务</div>
         <div class="tab-item" data-tab="tab9">增/删/改学情数据</div>
+        <div class="tab-item" data-tab="tab10">删除用户扩展字段</div>
     </div>
 
     <!-- 表单1：更新学员开课日（样式统一） -->
@@ -540,6 +541,76 @@
                 <div class="form-control">
                     <button type="submit" class="el-button" id="insert-live-data-btn">确认提交</button>
                     <!-- <button type="submit" class="el-button el-button-primary" id="insert-live-data-btn">✓ 确认提交</button> -->
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 表单10：删除用户扩展字段 -->
+    <div class="form-panel" id="tab10">
+        <form id="delete_user_extend_field" onsubmit="event.preventDefault(); DeleteUserExtendField()">
+            <div class="form-grid">
+                <label class="form-label"><span class="red">*</span>品牌代码</label>
+                <div class="form-control">
+                    <select id="extend_field_brand_code" class="custom-select">
+                        <option value="VIP_Maths">派培优</option>
+                        <option value="VIP_WanDou">益智</option>
+                        <option value="VIP_YuWen">口才</option>
+                    </select>
+                </div>
+                <label class="form-label"><span class="red">*</span>大用户ID</label>
+                <div class="form-control">
+                    <input id="extend_field_unification_id" name="unification_id" autocomplete="off" placeholder="请输入大用户ID" type="number"
+                           class="el-input__inner" required/>
+                </div>
+                <label class="form-label">删除字段<span class="tooltip"><span class="tooltip-text">不选择则删除全部字段</span></span></label>
+                <div class="form-control">
+                    <div class="multi-select-wrapper" id="field_multi_select">
+                        <div class="multi-select-trigger" onclick="toggleMultiSelect('field_multi_select')">
+                            <div class="multi-select-tags" id="field_selected_tags"></div>
+                            <span class="multi-select-placeholder">请选择字段（默认全部）</span>
+                            <span class="multi-select-clear" onclick="event.stopPropagation(); clearMultiSelect('field_multi_select')">清除</span>
+                            <span class="multi-select-arrow">▼</span>
+                        </div>
+                        <div class="multi-select-dropdown" id="field_multi_select_dropdown">
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="studentStage" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>studentStage(学生阶段)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="learnedMath" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>learnedMath(是否报过数学辅导课)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="materialVersion" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>materialVersion(教材版本)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="signUpReason" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>signUpReason(报名原因)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="lastExamScore" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>lastExamScore(上次考试成绩)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="grade" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>grade(年级)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="studentName" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>studentName(学生姓名)</span>
+                            </label>
+                            <label class="multi-select-option">
+                                <input type="checkbox" name="extend_field_name" value="remarkPhone" onchange="updateMultiSelectTags('field_multi_select')">
+                                <span>remarkPhone(备注手机号)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <label class="form-label"></label>
+                <div class="form-control">
+                    <button type="submit" class="el-button">确认删除</button>
                 </div>
             </div>
         </form>
