@@ -316,6 +316,21 @@ class Dm_Script():
 
                 sql_result1 = mysql_conn.execute(sql)
                 print(sql_result1)
+                
+                stat_msg_time = datetime.fromtimestamp(current_timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+                chat_data_id_result = mysql_conn.fetchone("SELECT LAST_INSERT_ID() as id")
+                chat_data_id = chat_data_id_result['id'] if chat_data_id_result else 0
+                stat_sql = """INSERT INTO `i61-bizcenter-corpwechat`.cw_chat_data_new_msg_stat_record 
+                    (biz_code, user_id, external_user_id, msg_time, chat_data_id, msg_type) 
+                    VALUES ('{}', '{}', '{}', '{}', {}, 0)
+                    ON DUPLICATE KEY UPDATE 
+                    msg_time = '{}', 
+                    external_user_msg_time = '{}', 
+                    chat_data_id = {}""".format(
+                    brand_code, user_id, external_user_id, stat_msg_time, chat_data_id, stat_msg_time, stat_msg_time, chat_data_id)
+                sql_result2 = mysql_conn.execute(stat_sql)
+                print(sql_result2)
+                
                 seq += 1
                 time.sleep(1)
                 current_timestamp = int(time.time() * 1000)
