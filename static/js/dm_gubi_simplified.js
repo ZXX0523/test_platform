@@ -394,7 +394,66 @@ document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('opencourseday');
     if (input) input.value = getCurrentDate();
     initCustomSelects();
+    initCategoryTabs();
 });
+
+/* ==================== 分类标签切换功能 ==================== */
+
+function initCategoryTabs() {
+    // 一级分类标签点击事件
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // 切换一级分类激活状态
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 切换二级子标签显示
+            document.querySelectorAll('.sub-tabs').forEach(sub => {
+                sub.classList.remove('active');
+                if (sub.dataset.category === category) {
+                    sub.classList.add('active');
+                }
+            });
+            
+            // 显示该分类下第一个tab的内容
+            const firstTabItem = document.querySelector(`.sub-tabs[data-category="${category}"] .sub-tab-item`);
+            if (firstTabItem) {
+                const tabId = firstTabItem.dataset.tab;
+                switchTabContent(tabId);
+                // 更新二级tab激活状态
+                document.querySelectorAll(`.sub-tabs[data-category="${category}"] .sub-tab-item`).forEach(t => t.classList.remove('active'));
+                firstTabItem.classList.add('active');
+            }
+        });
+    });
+    
+    // 二级子标签点击事件
+    document.querySelectorAll('.sub-tabs .sub-tab-item').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            const category = this.closest('.sub-tabs').dataset.category;
+            
+            // 更新当前分类下的激活状态
+            document.querySelectorAll(`.sub-tabs[data-category="${category}"] .sub-tab-item`).forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 切换表单内容
+            switchTabContent(tabId);
+        });
+    });
+}
+
+// 切换表单面板显示
+function switchTabContent(tabId) {
+    document.querySelectorAll('.dm-gubi-page .form-panel').forEach(panel => {
+        panel.classList.remove('active');
+        if (panel.id === tabId) {
+            panel.classList.add('active');
+        }
+    });
+}
 
 /* ==================== 多选下拉框功能 ==================== */
 

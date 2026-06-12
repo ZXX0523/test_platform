@@ -886,7 +886,7 @@ class Dm_Script():
         """
         删除用户扩展字段数据
         根据品牌代码和大用户ID删除 eos_basic.user_extend_field 表中的数据
-        :param env: 环境标识（注意：eos_basic 数据库目前只有一套配置）
+        :param env: 环境标识
         :param brand_code: 品牌代码 (VIP_Maths, VIP_WanDou, VIP_YuWen 等)
         :param unification_id: 大用户ID
         :param field_names: 要删除的字段名，逗号分隔（如 'studentStage,grade'），为空则删除全部

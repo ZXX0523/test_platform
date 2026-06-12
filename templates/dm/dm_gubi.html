@@ -34,18 +34,52 @@
         </div>
     </div>
 
-    <!-- 标签页 -->
-    <div class="tabs">
-        <div class="tab-item active" data-tab="tab1">更新学员开课日</div>
-        <div class="tab-item" data-tab="tab2">更新学员完课状态</div>
-        <div class="tab-item" data-tab="tab3">更新对弈数据</div>
-        <div class="tab-item" data-tab="tab4">删除已约复盘数据</div>
-        <div class="tab-item" data-tab="tab5">删除助力工具信息</div>
-        <div class="tab-item" data-tab="tab6">删除会话数据</div>
-        <div class="tab-item" data-tab="tab7">增加/删除企微聊天数据</div>
-        <div class="tab-item" data-tab="tab8">清理学情干预任务</div>
-        <div class="tab-item" data-tab="tab9">增/删/改学情数据</div>
-        <div class="tab-item" data-tab="tab10">删除用户扩展字段</div>
+    <!-- 标签页导航 -->
+    <div class="nav-tabs-wrapper">
+        <!-- 一级分类标签 -->
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="common">
+                <!-- <span class="tab-icon">💬</span> -->
+                <span class="tab-text">会话相关</span>
+            </div>
+            <div class="category-tab" data-category="gubi">
+                <!-- <span class="tab-icon">🎮</span> -->
+                <span class="tab-text">咕比</span>
+            </div>
+            <div class="category-tab" data-category="ppy">
+                <!-- <span class="tab-icon">📚</span> -->
+                <span class="tab-text">派培优</span>
+            </div>
+            <div class="category-tab" data-category="learning">
+                <!-- <span class="tab-icon">📊</span> -->
+                <span class="tab-text">学情干预任务</span>
+            </div>
+        </div>
+        <!-- 二级子标签 -->
+        <div class="sub-tabs-container">
+            <!-- 共用分类 -->
+            <div class="sub-tabs active" data-category="common">
+                <div class="sub-tab-item active" data-tab="tab6">删除会话数据</div>
+                <div class="sub-tab-item" data-tab="tab7">新增/删除企微聊天数据</div>
+            </div>
+            <!-- 咕比分类 -->
+            <div class="sub-tabs" data-category="gubi">
+                <div class="sub-tab-item active" data-tab="tab1">更新学员开课日</div>
+                <div class="sub-tab-item" data-tab="tab2">更新学员完课状态</div>
+                <div class="sub-tab-item" data-tab="tab3">更新对弈数据</div>
+                <div class="sub-tab-item" data-tab="tab4">删除已约复盘数据</div>
+                <div class="sub-tab-item" data-tab="tab5">删除助力工具信息</div>
+            </div>
+            <!-- 派培优分类 -->
+            <div class="sub-tabs" data-category="ppy">
+                <div class="sub-tab-item active" data-tab="tab10">删除学员信息扩展字段</div>
+            </div>
+            <!-- 学情分类 -->
+            <div class="sub-tabs" data-category="learning">
+                <div class="sub-tab-item active" data-tab="tab8">清理学情干预任务</div>
+                <div class="sub-tab-item" data-tab="tab9">增/删/改学情数据</div>
+            </div>
+        </div>
     </div>
 
     <!-- 表单1：更新学员开课日（样式统一） -->
