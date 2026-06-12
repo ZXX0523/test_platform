@@ -314,6 +314,18 @@ function InsertDmEduComLrnUserLiveF() {
     sendRequest(`/dm_gubi/py/insert_dm_edu_com_lrn_user_live_f?${buildUrlParams(params)}`, null, btn);
 }
 
+// 更新会话回复时间
+function UpdateConversationReplyTime() {
+    const params = {
+        env: getSelectedEnv(),
+        conversation_id: document.getElementById("reply_conversation_id").value,
+        last_reply_time: document.getElementById("reply_last_reply_time").value,
+        robot_last_reply_time: document.getElementById("reply_robot_last_reply_time").value || '',
+        last_invite_time: document.getElementById("reply_last_invite_time").value || ''
+    };
+    sendRequest(`/dm_gubi/py/update_conversation_reply_time?${buildUrlParams(params)}`);
+}
+
 /* ==================== UI交互函数 ==================== */
 
 // 切换更新模式：选择"更新数据"时展开可选字段区域

@@ -912,6 +912,51 @@ class Dm_Script():
             print(f"删除失败: {str(e)}")
             return False, f"删除失败: {str(e)}"
 
+    def update_conversation_reply_time(self, env, conversation_id, last_reply_time, robot_last_reply_time='', last_invite_time=''):
+        """
+        更新会话的最后回复时间
+        :param env: 环境标识 (test/pre)
+        :param conversation_id: 会话ID (dm_wechat_conversation表的id)
+        :param last_reply_time: 最后回复时间 (格式：YYYY-MM-DD HH:MM:SS)
+        :param robot_last_reply_time: 机器人最后回复时间，不填则使用last_reply_time
+        :param last_invite_time: 最后邀请时间，不填则清空该字段
+        :return: (成功状态, 消息)
+        """
+        try:
+            mysql_conn = self._get_mysql_conn(env, 'liuyi')
+            
+            # 如果robot_last_reply_time为空，则使用last_reply_time
+            if not robot_last_reply_time:
+                robot_last_reply_time = last_reply_time
+            
+            # 构建SQL语句
+            if last_invite_time:
+                sql = f"""UPDATE `i61-bizcenter-copilot`.dm_wechat_conversation 
+                          SET 
+                          last_reply_time = '{last_reply_time}', 
+                          robot_last_reply_time = '{robot_last_reply_time}', 
+                          last_invite_time = '{last_invite_time}'
+                          WHERE id = {conversation_id};"""
+            else:
+                sql = f"""UPDATE `i61-bizcenter-copilot`.dm_wechat_conversation 
+                          SET 
+                          last_reply_time = '{last_reply_time}', 
+                          robot_last_reply_time = '{robot_last_reply_time}', 
+                          last_invite_time = NULL
+                          WHERE id = {conversation_id};"""
+            
+            print(sql)
+            affected_rows = mysql_conn.execute(sql)
+            
+            if affected_rows > 0:
+                return {"msg": f"成功更新会话ID {conversation_id} 的回复时间"}
+            else:
+                return {"msg": f"会话ID {conversation_id} 不存在或数据未变更"}
+                
+        except Exception as e:
+            return {"msg": f"更新失败: {str(e)}"}
+        
+        
 if __name__ == '__main__':
     print("执行开始。。。。")
     choose_url = "test"
@@ -921,3 +966,5 @@ if __name__ == '__main__':
     # re = Dm_Script().insert_user_live_f(choose_url, 123123,456456,1)
     print(re)
     print("执行结束88,")
+
+    

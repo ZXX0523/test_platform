@@ -252,3 +252,20 @@ def delete_user_extend_field():
         res = {"msg": f"处理失败: {str(e)}", "code": 201, "data": None}
     print(json.dumps(res, ensure_ascii=False))
     return json.dumps(res, ensure_ascii=False)
+
+@dm_gubi.route('/py/update_conversation_reply_time')
+def update_conversation_reply_time():
+    env = flask.request.values.get('env')
+    conversation_id = flask.request.values.get('conversation_id')
+    last_reply_time = flask.request.values.get('last_reply_time')
+    robot_last_reply_time = flask.request.values.get('robot_last_reply_time', '')
+    last_invite_time = flask.request.values.get('last_invite_time', '')
+    try:
+        res = Dm_Script().update_conversation_reply_time(env, conversation_id, last_reply_time, robot_last_reply_time, last_invite_time)
+        print(res)
+    except KeyError as e:
+        res = {"msg": "处理失败", "code": 201, "data": str(e)}
+    except Exception as e:
+        res = {"msg": f"处理失败: {str(e)}", "code": 201, "data": None}
+    print(json.dumps(res, ensure_ascii=False))
+    return json.dumps(res, ensure_ascii=False)

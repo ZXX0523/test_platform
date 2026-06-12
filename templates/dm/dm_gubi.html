@@ -61,6 +61,7 @@
             <div class="sub-tabs active" data-category="common">
                 <div class="sub-tab-item active" data-tab="tab6">删除会话数据</div>
                 <div class="sub-tab-item" data-tab="tab7">新增/删除企微聊天数据</div>
+                <div class="sub-tab-item" data-tab="tab11">更新会话回复时间</div>
             </div>
             <!-- 咕比分类 -->
             <div class="sub-tabs" data-category="gubi">
@@ -602,7 +603,7 @@
                     <div class="multi-select-wrapper" id="field_multi_select">
                         <div class="multi-select-trigger" onclick="toggleMultiSelect('field_multi_select')">
                             <div class="multi-select-tags" id="field_selected_tags"></div>
-                            <span class="multi-select-placeholder">请选择字段（默认全部）</span>
+                            <span class="multi-select-placeholder">请选择字段（不选择则删除全部字段）</span>
                             <span class="multi-select-clear" onclick="event.stopPropagation(); clearMultiSelect('field_multi_select')">清除</span>
                             <span class="multi-select-arrow">▼</span>
                         </div>
@@ -649,6 +650,38 @@
             </div>
         </form>
     </div>
+
+    <!-- 表单11：更新会话回复时间 -->
+    <div class="form-panel" id="tab11">
+        <form id="update_conversation_reply_time" onsubmit="event.preventDefault(); UpdateConversationReplyTime()">
+            <div class="form-grid">
+                <label class="form-label"><span class="red">*</span>会话ID</label>
+                <div class="form-control">
+                    <input id="reply_conversation_id" name="conversation_id" autocomplete="off" placeholder="请输入会话ID"
+                           class="el-input__inner" required type="number"/>
+                </div>
+                <label class="form-label"><span class="red">*</span>最后回复时间</label>
+                <div class="form-control">
+                    <input id="reply_last_reply_time" name="last_reply_time" autocomplete="off" placeholder="格式：2026-04-08 09:16:16"
+                           class="el-input__inner" required/>
+                </div>
+                <label class="form-label">机器人最后回复时间<span class="tooltip"><span class="tooltip-text">不填则使用最后回复时间</span></span></label>
+                <div class="form-control">
+                    <input id="reply_robot_last_reply_time" name="robot_last_reply_time" autocomplete="off" placeholder="格式：2026-04-08 09:16:16"
+                           class="el-input__inner"/>
+                </div>
+                <label class="form-label">最后邀请时间<span class="tooltip"><span class="tooltip-text">不填则清空该字段</span></span></label>
+                <div class="form-control">
+                    <input id="reply_last_invite_time" name="last_invite_time" autocomplete="off" placeholder="格式：2026-04-08 09:16:16"
+                           class="el-input__inner"/>
+                </div>
+                <label class="form-label"></label>
+                <div class="form-control">
+                    <button type="submit" class="el-button">确认更新</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
     <!-- 操作结果区域 -->
@@ -656,18 +689,6 @@
         <div class="result-header">
             <h2 class="result-title">操作结果</h2>
             <div class="result-actions">
-                <!-- <span class="action-btn" id="clear-result">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 19C6 20.1046 6.89543 21 8 21H16C17.1046 21 18 20.1046 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="currentColor"/>
-                    </svg>
-                    清空
-                </span> -->
-                <!-- <span class="action-btn" id="copy-result">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 1H4C2.89543 1 2 1.89543 2 3V17H4V3H16V1ZM20 7H8C6.89543 7 6 7.89543 6 9V21C6 22.1046 6.89543 23 8 23H20C21.1046 23 22 22.1046 22 21V9C22 7.89543 21.1046 7 20 7ZM20 21H8V9H20V21Z" fill="currentColor"/>
-                    </svg>
-                    复制
-                </span> -->
             </div>
         </div>
         <div id="result"></div>
@@ -703,55 +724,19 @@
             });
         });
 
-        // // 结果面板功能
-        // // const resultEl = document.getElementById('result');
-        
-        // // // 清空结果
-        // // document.getElementById('clear-result').addEventListener('click', () => {
-        // //     resultEl.innerHTML = '';
-        // // });
-
-        // // // 复制结果
-        // // document.getElementById('copy-result').addEventListener('click', () => {
-        // //     if (!resultEl.textContent.trim()) {
-        // //         alert('暂无结果可复制');
-        // //         return;
-        // //     }
-        // //     navigator.clipboard.writeText(resultEl.textContent)
-        // //         .then(() => alert('复制成功'))
-        // //         .catch(() => alert('复制失败'));
-        // // });
-
-        // // 模拟结果输出（仅用于演示）
-        // window.UpdateUserInfo = window.UpdateUserInfo || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 更新学员开课日成功 | 学员ID：${document.getElementById('userid').value} | 开课日期：${document.getElementById('opencourseday').value}\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
-        
-        // window.FinishedStatus = window.FinishedStatus || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 更新完课状态成功 | 学员ID：${document.getElementById('gubi_id').value} | 完课状态：${document.getElementById('finished_status').value === '1' ? '已完课' : '未完课'}\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
-
-        // window.PkRecord = window.PkRecord || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 更新对弈数据成功 | 学员ID：${document.getElementById('user_id_pk').value} | 赢：${document.getElementById('win_num').value} 局 | 输：${document.getElementById('lose_num').value} 局\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
-
-        // window.DeleteReviewRecord = window.DeleteReviewRecord || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 删除复盘数据成功 | 学员ID：${document.getElementById('review_gubi_id').value}\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
-
-        // window.DeleteHelpUtilUserinfo = window.DeleteHelpUtilUserinfo || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 删除助力工具信息成功 | 学员ID：${document.getElementById('help_gubi_id').value}\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
-
-        // window.DeleteConversation = window.DeleteConversation || function() {
-        //     resultEl.innerHTML += `[${new Date().toLocaleString()}] 删除DM会话成功 | 坐席ID：${document.getElementById('seat_wechatid').value} | 用户名：${document.getElementById('user_wechatname').value}\n`;
-        //     resultEl.scrollTop = resultEl.scrollHeight;
-        // };
+        // 设置默认时间：当前时间的一天前
+        function setDefaultReplyTime() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const defaultTime = yesterday.getFullYear() + '-' + 
+                String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(yesterday.getDate()).padStart(2, '0') + ' ' + 
+                String(yesterday.getHours()).padStart(2, '0') + ':' + 
+                String(yesterday.getMinutes()).padStart(2, '0') + ':' + 
+                String(yesterday.getSeconds()).padStart(2, '0');
+            document.getElementById('reply_last_reply_time').value = defaultTime;
+        }
+        setDefaultReplyTime();
     </script>
 </body>
 </html>
