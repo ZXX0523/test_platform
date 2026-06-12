@@ -598,7 +598,7 @@
                     <input id="extend_field_unification_id" name="unification_id" autocomplete="off" placeholder="请输入大用户ID" type="number"
                            class="el-input__inner" required/>
                 </div>
-                <label class="form-label">删除字段<span class="tooltip"><span class="tooltip-text">不选择则删除全部字段</span></span></label>
+                <label class="form-label">删除字段<span class="tooltip"><span class="tooltip-text">请选择要删除的字段</span></span></label>
                 <div class="form-control">
                     <div class="multi-select-wrapper" id="field_multi_select">
                         <div class="multi-select-trigger" onclick="toggleMultiSelect('field_multi_select')">
@@ -609,35 +609,28 @@
                         </div>
                         <div class="multi-select-dropdown" id="field_multi_select_dropdown">
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="studentStage" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="studentStage" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>studentStage(学生阶段)</span>
                             </label>
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="learnedMath" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="learnedMath" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>learnedMath(是否报过数学辅导课)</span>
                             </label>
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="materialVersion" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="materialVersion" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>materialVersion(教材版本)</span>
                             </label>
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="signUpReason" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="signUpReason" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>signUpReason(报名原因)</span>
                             </label>
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="lastExamScore" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="lastExamScore" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>lastExamScore(上次考试成绩)</span>
                             </label>
+                            
                             <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="grade" onchange="updateMultiSelectTags('field_multi_select')">
-                                <span>grade(年级)</span>
-                            </label>
-                            <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="studentName" onchange="updateMultiSelectTags('field_multi_select')">
-                                <span>studentName(学生姓名)</span>
-                            </label>
-                            <label class="multi-select-option">
-                                <input type="checkbox" name="extend_field_name" value="remarkPhone" onchange="updateMultiSelectTags('field_multi_select')">
+                                <input type="checkbox" name="extend_field_name" value="remarkPhone" checked onchange="updateMultiSelectTags('field_multi_select')">
                                 <span>remarkPhone(备注手机号)</span>
                             </label>
                         </div>

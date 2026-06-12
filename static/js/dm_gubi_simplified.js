@@ -407,6 +407,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (input) input.value = getCurrentDate();
     initCustomSelects();
     initCategoryTabs();
+    // 初始化扩展字段多选框标签显示（默认全选）
+    updateMultiSelectTags('field_multi_select');
 });
 
 /* ==================== 分类标签切换功能 ==================== */

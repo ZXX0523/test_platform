@@ -889,20 +889,20 @@ class Dm_Script():
         :param env: 环境标识
         :param brand_code: 品牌代码 (VIP_Maths, VIP_WanDou, VIP_YuWen 等)
         :param unification_id: 大用户ID
-        :param field_names: 要删除的字段名，逗号分隔（如 'studentStage,grade'），为空则删除全部
+        :param field_names: 要删除的字段名，逗号分隔（如 'studentStage,grade'），为空则不删除
         :return: (成功状态, 消息)
         """
         try:
+            # 如果没有指定字段名，则不执行删除操作
+            if not field_names or field_names.strip() == '':
+                return True, "未选择任何字段，不执行删除操作"
+            
             mysql_conn = self._get_mysql_conn(env, 'eos_basic')
             
-            if field_names:
-                # 删除指定字段
-                field_list = field_names.split(',')
-                field_list_str = "','".join(field_list)
-                sql = f"""DELETE FROM eos_basic.user_extend_field WHERE brand_code='{brand_code}' AND unification_id='{unification_id}' AND field_name IN ('{field_list_str}')"""
-            else:
-                # 删除全部字段
-                sql = f"""DELETE FROM eos_basic.user_extend_field WHERE brand_code='{brand_code}' AND unification_id='{unification_id}'"""
+            # 删除指定字段
+            field_list = field_names.split(',')
+            field_list_str = "','".join(field_list)
+            sql = f"""DELETE FROM eos_basic.user_extend_field WHERE brand_code='{brand_code}' AND unification_id='{unification_id}' AND field_name IN ('{field_list_str}')"""
             
             print(sql)
             affected_rows = mysql_conn.execute(sql)
